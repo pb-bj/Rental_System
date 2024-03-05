@@ -1,7 +1,10 @@
 
 const Navbar = () => {
   return (
-    <div>Navbar</div>
+    <div>Navbar
+
+      <h1>This is a test</h1>
+    </div>
   )
 }
 
