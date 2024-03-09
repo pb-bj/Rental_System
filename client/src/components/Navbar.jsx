@@ -6,11 +6,13 @@ const Navbar = () => {
     <>
       <nav className="navbar bg-body-tertiary">
         <div className="container">
-          <Link className="navbar-brand"><b>
+          <Link to="/" className="navbar-brand"><b>
             Rental<span style={{color: "#8134A6"}}>X</span></b>
           </Link>
           <form className="d-flex">
+            <Link to="/login">
             <Button title="Sign In"/>
+            </Link>
           </form>
         </div>
       </nav>
