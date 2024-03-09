@@ -13,8 +13,8 @@ const Login = () => {
           <p>
             Dont have an account?{" "}
             <Link
-              className="text-black fw-bold text-decoration-none"
               to="/register"
+              className="text-black fw-bold text-decoration-none"
             >
               Sign In
             </Link>
