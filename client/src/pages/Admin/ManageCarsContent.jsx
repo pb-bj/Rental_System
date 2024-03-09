@@ -1,21 +1,25 @@
 import { Button } from '../../components/index';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import NewCarModel from './NewCarModel';
-import { getAllCars } from '../../api/cars';
+// import { getAllCars } from '../../api/cars';
+
+import { useFetchCars } from '../../contexts/CarContext';
 
 const ManageCarsContent = () => {
   const [ openModel , setOpenModel ] = useState(false);
-  const [ cars, setCars ] = useState([]);
 
-  useEffect(() => {
-      const fetchAllCars = async () => {
-        const result = await getAllCars(); 
-          console.log(result);
-          setCars(result);
-    }
+  const  { cars, fetchAllCars  } = useFetchCars();
+  // const [ cars, setCars ] = useState([]);
 
-    fetchAllCars();
-  }, [])
+  // useEffect(() => {
+  //     const fetchAllCars = async () => {
+  //       const result = await getAllCars(); 
+  //         console.log(result);
+  //         setCars(result);
+  //   }
+
+  //   fetchAllCars();
+  // }, [])
 
   return (
     <>
@@ -35,13 +39,12 @@ const ManageCarsContent = () => {
                   <th>mileage</th>
                   <th>features</th>
                   <th>price</th>
-                  {/* <th>images</th> */}
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 { cars.map((car) => (
-                <tr key={car.id}>
+                <tr key={car._id}>
                     <td>{car.brand}</td>
                     <td>{car.model}</td>
                     <td>{car.plateNo}</td>

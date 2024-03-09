@@ -8,7 +8,7 @@ export const validateCarDetails = ({ brand, model, plateNo, seats, mileage, pric
    if(!Number(seats) ) { errors.seats = '* Seats field is required' };
    if(!Number(mileage) ) { errors.mileage = '* Mileage field is required' };
    if(!Number(price) ) { errors.price = '* Price field is required' };
-   if(!Number(image) ) { errors.image = '* Image field is required' };
+   if(!image) { errors.image = '* Image field is required' };
 
    return errors;
 }
