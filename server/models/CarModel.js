@@ -36,10 +36,9 @@ const carSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    default: '',
+    required : true,
   },
 });
 
-const Car = mongoose.model('Car', carSchema);
+module.exports = mongoose.model('Car', carSchema);
 
-module.exports = Car;
