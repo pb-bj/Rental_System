@@ -1,16 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "../components";
-import { useState } from "react";
 
 const Register = () => {
-  const [ fullname, setFullname ] = useState('');
-  const [ email, setEmail ] = useState('');
-  const [ password, setPassword ] = useState('');
-  const [ confirmPassword, setConfirmPassword ] = useState('');
 
-  // const handleSubmit (e) => {
-      
-  // }
   return (
     <>
       <div

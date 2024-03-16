@@ -33,8 +33,9 @@ const AdminDashboard = () => {
     } 
   }
 
+
   return (
-    <section className="container-fluid  overflow-hidden">
+    <section className="container-fluid overflow-hidden">
       <div className="row">
         {/* Sidebar */}
         <div className="col-md-2 bg-black text-light vh-100 overflow-x-hidden">
@@ -47,7 +48,7 @@ const AdminDashboard = () => {
             </li>
             <li className="nav-item" onClick={() => handleSwapMenu('manage-cars')}>
               <div className="nav-link text-light">
-                <i class="bi bi-layout-text-sidebar-reverse"></i> Manage Cars
+                <i className="bi bi-layout-text-sidebar-reverse"></i> Manage Cars
               </div>
             </li>
             <li className="nav-item" onClick={() => handleSwapMenu('bookings')}>
