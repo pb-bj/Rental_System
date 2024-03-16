@@ -31,36 +31,36 @@ const ManageCarsContent = () => {
             <table className="table table-striped table-bordered">
               <thead>
                 <tr className='text-center'>
-                  <th>brand</th>
-                  <th>model</th>
-                  <th>plate_no</th>
-                  <th>seats</th>
-                  <th>type</th>
-                  <th>mileage</th>
-                  <th>features</th>
-                  <th>price</th>
+                  <th>Brand</th>
+                  <th>Model</th>
+                  <th>Plate_no</th>
+                  <th>Seats</th>
+                  <th>Type</th>
+                  <th>Mileage</th>
+                  <th>Features</th>
+                  <th>Price</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 { cars.map((car) => (
                 <tr key={car._id}>
-                    <td>{car.brand}</td>
-                    <td>{car.model}</td>
-                    <td>{car.plateNo}</td>
-                    <td>{car.seats}</td>
-                    <td>{car.carTypes}</td>
-                    <td>{car.mileage}</td>
-                    <td>{car.features}</td>
-                    <td>{car.price}</td>
+                    <td style={{ fontSize : '13px' }}>{car.brand}</td>
+                    <td style={{ fontSize : '13px' }}>{car.model}</td>
+                    <td style={{ fontSize : '13px' }}>{car.plateNo}</td>
+                    <td style={{ fontSize : '13px' }}>{car.seats}</td>
+                    <td style={{ fontSize : '13px' }}>{car.carTypes}</td>
+                    <td style={{ fontSize : '13px' }}>{car.mileage}</td>
+                    <td style={{ fontSize : '13px' }}>{car.features}</td>
+                    <td style={{ fontSize : '13px' }}>{car.price}</td>
                     {/* <td>{car.image}</td> */}
                     <td>
                       <div className="d-flex justify-content-around align-items-center gap-2">
                         <div>
-                          <i class="bi bi-trash fs-5" style={{ color : "red", cursor : "pointer"}}></i>
+                          <i className="bi bi-trash fs-5" style={{ color : "red", cursor : "pointer"}}></i>
                         </div>
                         <div>
-                          <i class="bi bi-box-arrow-up-right" style={{ color : "green", cursor : "pointer"}}></i>
+                          <i className="bi bi-box-arrow-up-right" style={{ color : "green", cursor : "pointer"}}></i>
                         </div>
                       </div>
                     </td>

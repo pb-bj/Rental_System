@@ -23,17 +23,17 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, next) => {
-    if(file.originalname.match(/[.](jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
-        return next( new Error("Invalid file format"), false)
+    if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+        return next(new Error("Invalid file format"), false);
     }
-    next(null, true )
+    next(null, true);
 };
 
 const upload = multer({ // server storage
     storage : storage,
     fileFilter : fileFilter,
     limits : { 
-        fileSize : 200000     
+        fileSize : 64000000     
     }
 })
 

@@ -3,6 +3,7 @@ import { getAllCars } from '../../api/cars';
 
 const Bookings = () => {
   const [ cars, setCars ] = useState([]);
+    console.log(cars)
   
   useEffect(() => {
     const fetchCars = async () => {
@@ -24,6 +25,7 @@ const Bookings = () => {
         { cars.map((car) => (
           <>
           <h2>{car.brand}</h2>
+          <p>price : Rs {car.price}</p>
           <img src={car.image} alt="" />
           </>
         ))}

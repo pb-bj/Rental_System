@@ -1,40 +1,77 @@
-const Car = require('../models/carSchema');
+const CarModel = require('../models/CarModel');
+
 
 exports.createNewCarDetails = async (req, res) => {
     try {
-        const { brand, model, plateNo, seats, carTypes, mileage, features, price, image } = req.body;
-
-        if (!brand || !model || !plateNo || !seats || !carTypes || !mileage || !features || !price || !image) {
-            return res.status(400).json({ error: "Missing required fields in the request body" });
+        const { brand, model, plateNo, seats, carTypes, mileage, features, price } = req.body;
+        if( !req.file ) {
+            return res.status(400).json({ error : 'Please provide the image of car' })
         }
 
-        const newCar = new Car({
-            brand: brand,
-            model: model,
-            plateNo: plateNo,
-            seats: seats,
-            carTypes: carTypes,
-            mileage: mileage,
-            features: features,
-            price: price,
-            image: image, 
-        });
+        // check for exisitng cars
+        let exisitngCars = await CarModel.findOne({ plateNo });
+            if(exisitngCars) {
+                return res.status(400).json({ error : 'Car Already Exist' });
+            }
 
-        const savedCar = await newCar.save();
-        res.status(201).json({ success : "Car detail created ", data : savedCar });
+        // creating a new cars
+        let addNewCars = await CarModel.create({
+            brand,
+            model,
+            plateNo,
+            seats,
+            carTypes,
+            mileage,
+            features,
+            price,
+            image : req.file.path
+        });
+        if(!addNewCars) {
+            return res.status(400).json({ error : 'Failed to add new car details' })
+        }
+        res.status(201).json({ message : 'New car added Successfully', data : addNewCars });
     } catch (error) {
-        console.error(error.stack);
-        res.status(500).json({ error: "Failed to create new car", message : error.message });
+        res.status(500).json({ error : 'Internal Server Error' });
     }
 };
 
-
+// read 
 exports.getAllCars = async (req, res) => {
     try {
-        const result = await Car.find();
-            res.status(200).json({ success : "fetched all cars successfull ", data : result });
-    } catch(err) {
-        console.error(error.stack)
+        const cars= await CarModel.find();
+            if(!cars) {
+                return res.status(400).json({ error : 'Something went wrong' });
+            }  
+            res.json({ data : cars });
+    } catch(error) {
         res.status(500).json({ error : "Failed to get cars", message : error.message});
+    }
+}
+
+// update
+exports.updateCarDetails = async (req, res) => {
+    try {
+        let updateCars = await CarModel.findByIdAndUpdate( req.params.id, req.body);
+
+        if(!updateCars) {
+            return res.status(404).json({ error : 'Failed to update car details' });
+        } 
+        res.send(updateCars)
+    } catch(error) {
+        res.status(400).json({ error : 'Internal Server Error' });
+    }
+};
+
+// delete
+exports.deleteCarDetails = async (req, res) => {
+    try {
+        let deleteCarDetails = await CarModel.findByIdAndDelete(req.params.id);
+            if(!deleteCarDetails) {
+                res.status(400).json({ error : 'Failed to delete car details' })
+            } else {
+                res.send({ message : 'Car details deleted successfully' })
+            }
+    } catch(error) {
+        res.status(500).json({ errror : 'Internal Server Error' });
     }
 }
