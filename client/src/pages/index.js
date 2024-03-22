@@ -4,7 +4,8 @@ import Register from './Register';
 import AdminDashboard from './Admin/AdminDashboard'
 import UserDashboard from './UserDashboard';
 import NotFoundPage from './NotFoundPage';
-
+import Vehicles from './Vehicles';
+import SingleVehicle from './SingleVehicle';
 
 export {
     Login,
@@ -12,5 +13,7 @@ export {
     Register,
     AdminDashboard,
     UserDashboard,
-    NotFoundPage    
+    NotFoundPage,
+    Vehicles,
+    SingleVehicle    
 }

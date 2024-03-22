@@ -6,7 +6,7 @@ require('dotenv').config();
 require('./database/connection');
 
 const port = process.env.PORT;
-// const usersRoute = require('./routes/usersRoute');
+const usersRoute = require('./routes/usersRoute');
 const carRouter = require('./routes/carRouter');
 
 // middlewares
@@ -16,7 +16,7 @@ app.use(cors());
 
 
 // routers
-// app.use("/api/auth", usersRoute);
+app.use("/api/auth", usersRoute);
 app.use("/api", carRouter);
 app.use('/public/uploads', express.static('public/uploads'))
 

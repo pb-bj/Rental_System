@@ -27,8 +27,8 @@ const carSchema = new mongoose.Schema({
     required: true,
   },
   features: {
-    type: [String],
-    default: [],
+    type: String,
+    required : true,
   },
   price: {
     type: Number,
@@ -36,8 +36,7 @@ const carSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    required : true,
-  },
+  }
 });
 
 module.exports = mongoose.model('Car', carSchema);

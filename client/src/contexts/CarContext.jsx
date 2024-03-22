@@ -1,21 +1,20 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getAllCars  } from "../api/cars";
+import { getAllCars } from "../api/cars";
 
 const CarContext = createContext();
 
 export const CarProvider = ({ children }) => {
     const [ cars, setCars ] = useState([]);
 
-    const fetchAllCars = async () => {
-        const response = await getAllCars();
-            setCars(response);
-    }
-
     useEffect(() => {
+        const fetchAllCars = async () => {
+            const carResults = await getAllCars();
+                setCars(carResults);
+        }
         fetchAllCars();
     }, []);
 
-    return <CarContext.Provider value={{ fetchAllCars, cars }}>{children}</CarContext.Provider>
+    return <CarContext.Provider value={{ cars, setCars,  }}>{children}</CarContext.Provider>
 };
 
 export const useFetchCars = () => {

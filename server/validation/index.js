@@ -9,8 +9,20 @@ exports.carRules = [
   check('mileage').notEmpty().withMessage('Mileage is required').isNumeric().withMessage('Mileage must be a number'),
   check('features').notEmpty().withMessage('Features is required'),
   check('price').notEmpty().withMessage('Price is required').isNumeric().withMessage('Price must be a number'),
-//   check('image').notEmpty().withMessage('Image is required'),
-]
+];
+
+exports.registerRules = [
+  check('fullname').trim().isLength({ min: 1 }).withMessage('Full name is required.').escape(),
+  check('email').isEmail().withMessage('Please provide a valid email address.'),
+  check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long.').matches(/\d/).withMessage('Password must contain a number.'),
+];
+
+exports.loginRules = [
+  check('email').isEmail().withMessage('Please provide a valid email address.'),
+  check('password').exists().withMessage('Password is required.')
+];
+
+
 
 exports.validationFunction = (req, res, next) => {
     const errors = validationResult(req)

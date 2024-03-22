@@ -1,36 +1,34 @@
 import { Button } from '../../components/index';
 import { useState } from 'react';
 import NewCarModel from './NewCarModel';
-// import { getAllCars } from '../../api/cars';
+import UpdateCarModel from './UpdateCarModel';
 
 import { useFetchCars } from '../../contexts/CarContext';
+// import { deleteCarItem } from '../../api/cars';
 
 const ManageCarsContent = () => {
   const [ openModel , setOpenModel ] = useState(false);
+  const [ openUpdateModel , setOpenUpdateModel ] = useState(false);
+  const [ updateCarId, setUpdateCarId ] = useState(null);
+  const  { cars } = useFetchCars();
 
-  const  { cars, fetchAllCars  } = useFetchCars();
-  // const [ cars, setCars ] = useState([]);
+  const handleUpdateModel = (carId) => {
+    setUpdateCarId(carId);
+    setOpenUpdateModel(!openUpdateModel)
+  }
 
-  // useEffect(() => {
-  //     const fetchAllCars = async () => {
-  //       const result = await getAllCars(); 
-  //         console.log(result);
-  //         setCars(result);
-  //   }
-
-  //   fetchAllCars();
-  // }, [])
-
-  return (
+  return (    
     <>
           <section className="container-fluid mx-3 p-3">
             <div className="mb-3" onClick={() => setOpenModel(!openModel) }>
               <Button title="Create New"  />
             </div>
             { openModel && <NewCarModel onCloseModel={setOpenModel} /> }
+            { openUpdateModel && <UpdateCarModel onCloseModel={setOpenUpdateModel} updateId={updateCarId} /> }
             <table className="table table-striped table-bordered">
               <thead>
                 <tr className='text-center'>
+                  <th>Sn</th>
                   <th>Brand</th>
                   <th>Model</th>
                   <th>Plate_no</th>
@@ -43,8 +41,9 @@ const ManageCarsContent = () => {
                 </tr>
               </thead>
               <tbody>
-                { cars.map((car) => (
-                <tr key={car._id}>
+                { cars.map((car,i) => (
+                  <tr key={car._id}>
+                    <td style={{ fontSize : '13px' }}>{i+1}</td>
                     <td style={{ fontSize : '13px' }}>{car.brand}</td>
                     <td style={{ fontSize : '13px' }}>{car.model}</td>
                     <td style={{ fontSize : '13px' }}>{car.plateNo}</td>
@@ -53,13 +52,12 @@ const ManageCarsContent = () => {
                     <td style={{ fontSize : '13px' }}>{car.mileage}</td>
                     <td style={{ fontSize : '13px' }}>{car.features}</td>
                     <td style={{ fontSize : '13px' }}>{car.price}</td>
-                    {/* <td>{car.image}</td> */}
                     <td>
                       <div className="d-flex justify-content-around align-items-center gap-2">
                         <div>
                           <i className="bi bi-trash fs-5" style={{ color : "red", cursor : "pointer"}}></i>
                         </div>
-                        <div>
+                        <div onClick={() => handleUpdateModel(car._id)}>
                           <i className="bi bi-box-arrow-up-right" style={{ color : "green", cursor : "pointer"}}></i>
                         </div>
                       </div>
