@@ -1,10 +1,11 @@
 import { Button } from '../../components/index';
-import { useState } from 'react';
-import { carPostRequest } from '../../api/cars';
+import { useEffect, useState } from 'react';
+import { updateCarItem, getSingleCar } from '../../api/cars';
 import { FormInput } from '../../components/index';
 // import { validateCarDetails } from '../../utils/validate'
 
-const NewCarModel = ({ onCloseModel }) => {
+const UpdateCarModel = ({ onCloseModel, updateId }) => {
+  console.log(updateId)
     const [ brand, setBrand ] = useState('');
     const [ model, setModel ] = useState('');
     const [ plateNo, setPlateNo ] = useState('');
@@ -32,20 +33,19 @@ const NewCarModel = ({ onCloseModel }) => {
       formData.append('features', features );
       formData.append('image', image );
 
+      useEffect(() => {
+        const fetchSingleCarDetails = async () => {
+           const response = await getSingleCar(updateId);
+            console.log(response)
+        }
+
+        fetchSingleCarDetails()
+      }, [])
     const handleSubmit = async (e) => {
       e.preventDefault()
   
       try {
-            await carPostRequest(formData);
-            setBrand('');
-            setModel('');
-            setPlateNo('');
-            setSeatsString('');
-            setCarTypes('');
-            setMileageString('');
-            setFeatures('');
-            setPriceString('');
-            setImage('');
+           
         } catch(error) {
           console.error(error);   
         }
@@ -57,7 +57,7 @@ const NewCarModel = ({ onCloseModel }) => {
             <div className="modal-dialog">
               <div className="modal-content" style={{ width : "700px"}}>
                 <div className="modal-header">
-                  <h5 className="modal-title">Create New Car</h5>
+                  <h5 className="modal-title">Update Car Details</h5>
                   <button type="button" className="btn-close shadow-none" onClick={() => onCloseModel(false)}></button>
                 </div>
                 <div className="modal-body">
@@ -86,7 +86,7 @@ const NewCarModel = ({ onCloseModel }) => {
                                 { errorMessage.image && <p className='text-danger' style={{ fontSize : '14px'}}>{errorMessage.image}</p>}
                             </div>
                       </div>
-                        <div><Button title="Create" type="submit" /></div>
+                        <div><Button title="Update" type="submit" /></div>
                   </form>
                 </div>
               </div>
@@ -96,4 +96,4 @@ const NewCarModel = ({ onCloseModel }) => {
   );
 };
 
-export default NewCarModel;
+export default UpdateCarModel;

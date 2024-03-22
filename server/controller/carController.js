@@ -1,7 +1,7 @@
 const CarModel = require('../models/CarModel');
 
-
 exports.createNewCarDetails = async (req, res) => {
+    console.log(req.file)
     try {
         const { brand, model, plateNo, seats, carTypes, mileage, features, price } = req.body;
         if( !req.file ) {
@@ -24,7 +24,7 @@ exports.createNewCarDetails = async (req, res) => {
             mileage,
             features,
             price,
-            image : req.file.path
+            image : req.file?.path
         });
         if(!addNewCars) {
             return res.status(400).json({ error : 'Failed to add new car details' })
@@ -42,7 +42,7 @@ exports.getAllCars = async (req, res) => {
             if(!cars) {
                 return res.status(400).json({ error : 'Something went wrong' });
             }  
-            res.json({ data : cars });
+            res.send(cars);
     } catch(error) {
         res.status(500).json({ error : "Failed to get cars", message : error.message});
     }
@@ -73,5 +73,18 @@ exports.deleteCarDetails = async (req, res) => {
             }
     } catch(error) {
         res.status(500).json({ errror : 'Internal Server Error' });
+    }
+}
+
+// single vehicle
+exports.getSingleCarDetail = async (req, res) => {
+    try {
+        let car = await CarModel.findById( req.params.id );
+            if(!car) {
+                return res.status(400).json({ error : 'Failed to provide car detail' });
+            }   
+            res.send(car)
+    } catch (error) {
+        res.status(500).json({ error : 'Internal Server Error' });
     }
 }

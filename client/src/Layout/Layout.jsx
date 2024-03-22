@@ -5,10 +5,10 @@ const Layout = () => {
   return (
     <div>
         <Navbar />
-          <main className="container">
+          <main className="mt-1">
             <Outlet/>
           </main>
-        <Footer />
+        {/* <Footer /> */}
     </div>
   )
 }

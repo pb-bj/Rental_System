@@ -6,6 +6,8 @@ import {
   AdminDashboard,
   UserDashboard,
   Register,
+  Vehicles,
+  SingleVehicle
 } from "./pages/index";
 import Layout from "./Layout/Layout";
 // import { useLoginContext } from './contexts/AuthContext';
@@ -20,8 +22,10 @@ const App = () => {
 
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/vehicles" element={<Vehicles />} />
+          <Route path="/vehicles/:carId" element={<SingleVehicle />} />
           <Route path="/user/dashboard" element={<UserDashboard />} />
-          {/* <Route path="/vechicles" element={<Vechicles />} /> */}
+
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

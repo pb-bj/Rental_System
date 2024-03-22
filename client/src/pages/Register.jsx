@@ -1,8 +1,30 @@
+import { useForm } from "react-hook-form"
+import * as yup from "yup"
+import { yupResolver } from "@hookform/resolvers/yup"
+
 import { Link } from "react-router-dom";
 import { Button } from "../components";
 
-const Register = () => {
+const validationSchema = yup.object({
+  fullName : yup.string().required('* fullname is required'),
+  email : yup.string().required('* email is required').email('Invalid email format'),
+  password : yup.string().required('*password is required'),
+  confirmPassword : yup.string().required('* password do not match')
+}).required()
 
+const Register = () => {
+  const { register, handleSubmit, formState : {errors} } = useForm({
+    resolver : yupResolver(validationSchema),
+    defaultValues : {
+      fullName : '',
+      email : '',
+      password : '',
+      confirmPassword :''
+    }
+  });
+  console.log('errors', errors)
+  
+  const onSubmit = (data) => console.log(data);
   return (
     <>
       <div
@@ -18,7 +40,7 @@ const Register = () => {
             </Link>
           </p>
         </div>
-        <form className="w-25" >
+        <form className="w-25" onSubmit={ handleSubmit(onSubmit) }>
           <div className="mb-3">
             <label className="form-label">
               <b>Fullname</b>
@@ -27,9 +49,9 @@ const Register = () => {
               type="text"
               className="form-control shadow-none"
               placeholder="Fullname"
-              value={fullname}
-              onChange={(e) => setFullname(e.target.value) }
+              {...register('fullName')}
             />
+            { errors.fullName && <span className="text-danger" style={{ fontSize : '13px'}}>{errors.fullName.message}</span>}
           </div>
           <div className="mb-3">
             <label className="form-label">
@@ -39,9 +61,9 @@ const Register = () => {
               type="email"
               className="form-control shadow-none"
               placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value) }
+              {...register('email')}
             />
+            { errors.email && <span className="text-danger" style={{ fontSize : '13px'}}>{errors.email.message}</span>}
           </div>
           
           <div className="mb-3">
@@ -52,9 +74,9 @@ const Register = () => {
               type="password"
               className="form-control shadow-none"
               placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value) }
+              {...register('password')}
             />
+            { errors.password && <span className="text-danger" style={{ fontSize : '13px'}}>{errors.password.message}</span>}
           </div>
 
           <div className="mb-3">
@@ -65,9 +87,9 @@ const Register = () => {
               type="password"
               className="form-control shadow-none"
               placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value) }
+              {...register('confirmPassword')}
             />
+            { errors.confirmPassword && <span className="text-danger" style={{ fontSize : '13px'}}>{errors.confirmPassword.message}</span>}
           </div>
 
           <div className="d-grid gap-2 col-12 mx-auto">
