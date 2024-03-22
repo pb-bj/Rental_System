@@ -5,7 +5,6 @@ import { FormInput } from '../../components/index';
 // import { validateCarDetails } from '../../utils/validate'
 
 const UpdateCarModel = ({ onCloseModel, updateId }) => {
-  console.log(updateId)
     const [ brand, setBrand ] = useState('');
     const [ model, setModel ] = useState('');
     const [ plateNo, setPlateNo ] = useState('');
@@ -17,39 +16,48 @@ const UpdateCarModel = ({ onCloseModel, updateId }) => {
     const [ image, setImage ] = useState(null);
     const [ errorMessage, setErrorMessage ] = useState({});
 
-    const seats = Number(seatsString);
-    const mileage = Number(mileageString);
-    const price = Number(priceString);
-    
-    
-    const formData = new FormData();
-      formData.append('brand', brand );
-      formData.append('model', model );
-      formData.append('plateNo', plateNo );
-      formData.append('seats', seats );
-      formData.append('mileage', mileage );
-      formData.append('price', price );
-      formData.append('carTypes', carTypes );
-      formData.append('features', features );
-      formData.append('image', image );
+    useEffect(() => {
+      const fetchSingleCarDetails = async () => {
+        const carDetail = await getSingleCar(updateId);
+        console.log(carDetail)
+        setBrand(carDetail.brand);
+        setModel(carDetail.model);
+        setPlateNo(carDetail.plateNo);
+        setSeatsString(carDetail.seats);
+        setCarTypes(carDetail.carTypes);
+        setMileageString(carDetail.mileage);
+        setFeatures(carDetail.features);
+        setPriceString(carDetail.price);
+        setImage(carDetail.image);
+      }
+      
+      fetchSingleCarDetails()
+    }, [updateId]);
 
-      useEffect(() => {
-        const fetchSingleCarDetails = async () => {
-           const response = await getSingleCar(updateId);
-            console.log(response)
-        }
-
-        fetchSingleCarDetails()
-      }, [])
+    
     const handleSubmit = async (e) => {
       e.preventDefault()
-  
       try {
-           
-        } catch(error) {
-          console.error(error);   
+        const seats = Number(seatsString);
+        const mileage = Number(mileageString);
+        const price = Number(priceString);
+        
+        const formData = new FormData();
+          formData.append('brand', brand );
+          formData.append('model', model );
+          formData.append('plateNo', plateNo );
+          formData.append('seats', seats );
+          formData.append('mileage', mileage );
+          formData.append('price', price );
+          formData.append('carTypes', carTypes );
+          formData.append('features', features );
+          formData.append('image', image );
+        
+          // sending update info
+           await updateCarItem(updateId, formData);
+      } catch(error) {
+          console.error(`Error while updating` ,error);   
         }
-
     }
     return (
         <>

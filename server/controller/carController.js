@@ -51,14 +51,29 @@ exports.getAllCars = async (req, res) => {
 // update
 exports.updateCarDetails = async (req, res) => {
     try {
-        let updateCars = await CarModel.findByIdAndUpdate( req.params.id, req.body);
+        const { brand, model, plateNo, seats, carTypes, mileage, features, price } = req.body;
+        let updateCars = await CarModel.findByIdAndUpdate( req.params.id, {
+            brand,
+            model,
+            plateNo,
+            seats,
+            carTypes,
+            mileage,
+            features,
+            price
+        }, { new : true });
+
+        if (req.file) {
+            updateCars.image = req.file.path; 
+            await updateCars.save();
+        }
 
         if(!updateCars) {
-            return res.status(404).json({ error : 'Failed to update car details' });
+            return res.status(400).json({ error : 'Failed to update car details' });
         } 
-        res.send(updateCars)
+        res.json({ message : 'Updated Successfully'})
     } catch(error) {
-        res.status(400).json({ error : 'Internal Server Error' });
+        res.status(500).json({ error : 'Internal Server Error' });
     }
 };
 
