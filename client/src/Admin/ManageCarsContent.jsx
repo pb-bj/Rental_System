@@ -1,22 +1,30 @@
-import { Button } from '../../components/index';
+import { Button } from '../components';
 import { useState } from 'react';
 import NewCarModel from './NewCarModel';
 import UpdateCarModel from './UpdateCarModel';
 
-import { useFetchCars } from '../../contexts/CarContext';
-// import { deleteCarItem } from '../../api/cars';
+import { useFetchCars } from '../contexts/CarContext';
+import DeleteCarModel from './DeleteCarModel';
 
 const ManageCarsContent = () => {
   const [ openModel , setOpenModel ] = useState(false);
   const [ openUpdateModel , setOpenUpdateModel ] = useState(false);
+  const [ openDeleteModel , setOpenDeleteModel ] = useState(false);
   const [ updateCarId, setUpdateCarId ] = useState(null);
-  const  { cars } = useFetchCars();
+  const [ deleteCarId, setDeleteCarId ] = useState(null);
+  const  { cars, setCars } = useFetchCars();
 
   const handleUpdateModel = (carId) => {
     setUpdateCarId(carId);
     setOpenUpdateModel(!openUpdateModel)
   }
 
+  const handleDelete = (carId) => {
+    setDeleteCarId(carId);
+    setOpenDeleteModel(!openUpdateModel)
+  }
+
+ 
   return (    
     <>
           <section className="container-fluid mx-3 p-3">
@@ -24,7 +32,8 @@ const ManageCarsContent = () => {
               <Button title="Create New"  />
             </div>
             { openModel && <NewCarModel onCloseModel={setOpenModel} /> }
-            { openUpdateModel && <UpdateCarModel onCloseModel={setOpenUpdateModel} updateId={updateCarId} /> }
+            { openUpdateModel && <UpdateCarModel onCloseModel={setOpenUpdateModel} updateId={ updateCarId } /> }
+            { openDeleteModel && <DeleteCarModel onCloseModel={setOpenDeleteModel} deleteId={ deleteCarId }/>}
             <table className="table table-striped table-bordered">
               <thead>
                 <tr className='text-center'>
@@ -54,11 +63,11 @@ const ManageCarsContent = () => {
                     <td style={{ fontSize : '13px' }}>{car.price}</td>
                     <td>
                       <div className="d-flex justify-content-around align-items-center gap-2">
-                        <div>
+                        <div onClick={() => handleDelete(car._id) }>
                           <i className="bi bi-trash fs-5" style={{ color : "red", cursor : "pointer"}}></i>
                         </div>
                         <div onClick={() => handleUpdateModel(car._id)}>
-                          <i className="bi bi-box-arrow-up-right" style={{ color : "green", cursor : "pointer"}}></i>
+                          <i className="bi bi-pencil-square" style={{ color : "green", cursor : "pointer"}}></i>
                         </div>
                       </div>
                     </td>

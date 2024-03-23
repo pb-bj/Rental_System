@@ -1,0 +1,9 @@
+.bgGradient {
+    /** TEXT GRADIENT */
+        color: #9c27b0;
+        background-image: -webkit-linear-gradient(45deg, #9c27b0 0%, #fa528a 33%, #ffc30f 67%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        /* text-fill-color: transparent; */
+        -webkit-text-fill-color: transparent;
+}

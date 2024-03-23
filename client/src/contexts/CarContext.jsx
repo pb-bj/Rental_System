@@ -14,7 +14,7 @@ export const CarProvider = ({ children }) => {
         fetchAllCars();
     }, []);
 
-    return <CarContext.Provider value={{ cars, setCars,  }}>{children}</CarContext.Provider>
+    return <CarContext.Provider value={{ cars, setCars, }}>{children}</CarContext.Provider>
 };
 
 export const useFetchCars = () => {

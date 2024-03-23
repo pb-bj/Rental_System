@@ -1,7 +1,7 @@
-import { Button } from '../../components/index';
+import { Button } from '../components/index';
 import { useEffect, useState } from 'react';
-import { updateCarItem, getSingleCar } from '../../api/cars';
-import { FormInput } from '../../components/index';
+import { updateCarItem, getSingleCar } from '../api/cars';
+import { FormInput } from '../components/index';
 // import { validateCarDetails } from '../../utils/validate'
 
 const UpdateCarModel = ({ onCloseModel, updateId }) => {
