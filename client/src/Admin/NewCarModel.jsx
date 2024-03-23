@@ -1,7 +1,7 @@
-import { Button } from '../../components/index';
+import { Button } from '../components/Button';
 import { useState } from 'react';
-import { carPostRequest } from '../../api/cars';
-import { FormInput } from '../../components/index';
+import { carPostRequest } from '../api/cars';
+import { FormInput } from '../components/index';
 // import { validateCarDetails } from '../../utils/validate'
 
 const NewCarModel = ({ onCloseModel }) => {
@@ -61,7 +61,7 @@ const NewCarModel = ({ onCloseModel }) => {
                   <button type="button" className="btn-close shadow-none" onClick={() => onCloseModel(false)}></button>
                 </div>
                 <div className="modal-body">
-                  <form onSubmit={handleSubmit}>
+                  <form onSubmit={ handleSubmit }>
                       <div className="d-flex gap-2">
                             <div className="col-6">
                                 <FormInput label="Brand" type="text" value={brand} onChange={(e) => setBrand(e.target.value)}/>

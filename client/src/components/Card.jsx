@@ -4,12 +4,11 @@ import { Button } from './index';
 export const Card = ( { items }) => {
     const { _id, brand, model, image, price, carTypes } = items
     return (
-        <div className='d-flex rounded border mb-3' style={{ cursor : 'pointer'}} key={_id}>
+        <div className='shadow-sm d-flex rounded border mb-3' style={{ cursor : 'pointer'}} key={_id}>
             <div className='col'>
                 <img  
                     className="rounded-start" 
                     style={{ maxWidth:'280px', height : '170px', width : '100%' }}
-                    // style={{ maxWidth: '100%', height : 'auto', width: '100%' }}  
                     src={`${import.meta.env.VITE_APP_BASE_URL}/${image}`} alt="" />
             </div>
             <div className='col-6 py-2 px-3'>

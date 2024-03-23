@@ -3,13 +3,14 @@ import {
   Home,
   NotFoundPage,
   Login,
-  AdminDashboard,
   UserDashboard,
   Register,
   Vehicles,
   SingleVehicle
 } from "./pages/index";
+
 import Layout from "./Layout/Layout";
+import { AdminDashboard, Bookings, CustomerDetails, DashboardContent, ManageCarsContent } from "./Admin/index";
 // import { useLoginContext } from './contexts/AuthContext';
 
 const App = () => {
@@ -18,7 +19,12 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin-panel" element={<AdminDashboard />}>
+            <Route path="dashboard" element={<DashboardContent/>}/>
+            <Route path="cars-details" element={<ManageCarsContent />}/>
+            <Route path="bookings-details" element={<Bookings/>}/>
+            <Route path="customers-details" element={<CustomerDetails />}/>
+          </Route>
 
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />} />
