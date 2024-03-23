@@ -2,6 +2,7 @@ import { Button } from '../components/index';
 import { useEffect, useState } from 'react';
 import { updateCarItem, getSingleCar } from '../api/cars';
 import { FormInput } from '../components/index';
+import { useFetchCars } from '../contexts/CarContext';
 // import { validateCarDetails } from '../../utils/validate'
 
 const UpdateCarModel = ({ onCloseModel, updateId }) => {
@@ -16,10 +17,13 @@ const UpdateCarModel = ({ onCloseModel, updateId }) => {
     const [ image, setImage ] = useState(null);
     const [ errorMessage, setErrorMessage ] = useState({});
 
+    const { fetchAllCars } = useFetchCars();
+
     useEffect(() => {
       const fetchSingleCarDetails = async () => {
         const carDetail = await getSingleCar(updateId);
-        console.log(carDetail)
+        fetchAllCars();
+        // console.log(carDetail)
         setBrand(carDetail.brand);
         setModel(carDetail.model);
         setPlateNo(carDetail.plateNo);

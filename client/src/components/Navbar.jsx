@@ -7,7 +7,7 @@ const Navbar = () => {
       <nav className="navbar bg-body-tertiary position-fixed w-100 top-0">
         <div className="container">
           <Link to="/" className="navbar-brand"><b>
-            Rental<span style={{color: "#8134A6"}}>X</span></b>
+            Rental <span style={{color: "#8134A6"}}>Hub</span></b>
           </Link>
           <form className="d-flex">
             <Link to="/login">

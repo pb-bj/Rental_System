@@ -1,9 +1,12 @@
 import { deleteCarItem } from "../api/cars";
+import { useFetchCars } from "../contexts/CarContext";
 
 const DeleteCarModel = ({ onCloseModel, deleteId }) => {
-    
+    const { fetchAllCars } = useFetchCars()
     const handleConfirmDelete = async () => {
         const deleteResult = await deleteCarItem(deleteId)
+            fetchAllCars();
+            onCloseModel(false);
             if(deleteResult) {
                 console.log('Deleted', deleteResult);
             }
