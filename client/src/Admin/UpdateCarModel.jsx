@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { updateCarItem, getSingleCar } from '../api/cars';
 import { FormInput } from '../components/index';
 import { useFetchCars } from '../contexts/CarContext';
+import toast from 'react-hot-toast';
 // import { validateCarDetails } from '../../utils/validate'
 
 const UpdateCarModel = ({ onCloseModel, updateId }) => {
@@ -59,8 +60,12 @@ const UpdateCarModel = ({ onCloseModel, updateId }) => {
         
           // sending update info
            await updateCarItem(updateId, formData);
+           onCloseModel(false)
+           toast.success('Updated Successfully')
+           fetchAllCars()
       } catch(error) {
-          console.error(`Error while updating` ,error);   
+          console.error(`Error while updating` ,error);  
+          toast.error('Failed to update') 
         }
     }
     return (

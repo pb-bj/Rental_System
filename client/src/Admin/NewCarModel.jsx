@@ -1,3 +1,4 @@
+import { toast } from 'react-hot-toast';
 import { Button } from '../components/Button';
 import { useState } from 'react';
 import { carPostRequest } from '../api/cars';
@@ -17,6 +18,7 @@ const NewCarModel = ({ onCloseModel }) => {
     const [ image, setImage ] = useState(null);
     const [ errorMessage, setErrorMessage ] = useState({});
     const { fetchAllCars } = useFetchCars()
+    // const notify = () => toast('Car added');
 
     const seats = Number(seatsString);
     const mileage = Number(mileageString);
@@ -38,17 +40,20 @@ const NewCarModel = ({ onCloseModel }) => {
       e.preventDefault()
   
       try {
+        
             await carPostRequest(formData);
             fetchAllCars()
-            setBrand('');
-            setModel('');
-            setPlateNo('');
-            setSeatsString('');
-            setCarTypes('');
-            setMileageString('');
-            setFeatures('');
-            setPriceString('');
-            setImage('');
+            // setBrand('');
+            // setModel('');
+            // setPlateNo('');
+            // setSeatsString('');
+            // setCarTypes('');
+            // setMileageString('');
+            // setFeatures('');
+            // setPriceString('');
+            // setImage('');
+            onCloseModel(false);
+            toast.success('Car added successfully',  {  duration: 3000 });
         } catch(error) {
           console.error(error);   
         }

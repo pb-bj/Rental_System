@@ -1,3 +1,4 @@
+import { toast } from "react-hot-toast";
 import { deleteCarItem } from "../api/cars";
 import { useFetchCars } from "../contexts/CarContext";
 
@@ -7,8 +8,9 @@ const DeleteCarModel = ({ onCloseModel, deleteId }) => {
         const deleteResult = await deleteCarItem(deleteId)
             fetchAllCars();
             onCloseModel(false);
-            if(deleteResult) {
-                console.log('Deleted', deleteResult);
+            toast.success('Deleted Successfully')
+            if(!deleteResult) {
+                console.log('Failed to Deleted');
             }
     }
     return (
