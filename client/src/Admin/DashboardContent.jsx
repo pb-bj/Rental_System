@@ -1,7 +1,11 @@
 import { DashboardCard } from "./index"
-import './color.css'
+import './color.css';
+
+import { useFetchCars } from "../contexts/CarContext";
 
 const DashboardContent = () => {
+  const {cars } = useFetchCars();
+  let totalcars;
   return (
     <div className="container">
       <h2 className="fw-semibold">Your total revenue</h2>
@@ -10,6 +14,7 @@ const DashboardContent = () => {
           <DashboardCard title="New Orders"  context="11" />
           <DashboardCard title="Bookings" context="28" />
           <DashboardCard title="Customers"  context="8"/>
+          <DashboardCard title="Available Cars"  context={cars.length}/>
      
     </div>
     </div>

@@ -2,6 +2,7 @@ import { Button } from '../components/Button';
 import { useState } from 'react';
 import { carPostRequest } from '../api/cars';
 import { FormInput } from '../components/index';
+import { useFetchCars } from '../contexts/CarContext';
 // import { validateCarDetails } from '../../utils/validate'
 
 const NewCarModel = ({ onCloseModel }) => {
@@ -15,6 +16,7 @@ const NewCarModel = ({ onCloseModel }) => {
     const [ priceString, setPriceString ] = useState('');
     const [ image, setImage ] = useState(null);
     const [ errorMessage, setErrorMessage ] = useState({});
+    const { fetchAllCars } = useFetchCars()
 
     const seats = Number(seatsString);
     const mileage = Number(mileageString);
@@ -37,6 +39,7 @@ const NewCarModel = ({ onCloseModel }) => {
   
       try {
             await carPostRequest(formData);
+            fetchAllCars()
             setBrand('');
             setModel('');
             setPlateNo('');
