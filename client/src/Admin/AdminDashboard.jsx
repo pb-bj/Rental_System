@@ -41,7 +41,7 @@ const AdminDashboard = () => {
               </ul>
             </div>
           </div>
-          <div className="p-3">
+          <div className="p-1">
           <Outlet />
           </div>
         </div>
