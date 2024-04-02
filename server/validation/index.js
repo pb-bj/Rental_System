@@ -1,7 +1,7 @@
-const { validationResult, check } = require('express-validator');
+import { validationResult, check } from 'express-validator';
 
-exports.carRules = [
-  check('brand', ).notEmpty().withMessage('Brand is required'),
+export const carRules = [
+  check('brand',).notEmpty().withMessage('Brand is required'),
   check('model').notEmpty().withMessage('Model is required'),
   check('plateNo').notEmpty().withMessage('Plate number is required'),
   check('seats').notEmpty().withMessage('Number of seats is required').isNumeric().withMessage('Seats must be a number'),
@@ -11,25 +11,25 @@ exports.carRules = [
   check('price').notEmpty().withMessage('Price is required').isNumeric().withMessage('Price must be a number'),
 ];
 
-exports.registerRules = [
+export const registerRules = [
   check('fullname').trim().isLength({ min: 1 }).withMessage('Full name is required.').escape(),
   check('email').isEmail().withMessage('Please provide a valid email address.'),
   check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long.').matches(/\d/).withMessage('Password must contain a number.'),
 ];
 
-exports.loginRules = [
+export const loginRules = [
   check('email').isEmail().withMessage('Please provide a valid email address.'),
   check('password').exists().withMessage('Password is required.')
 ];
 
 
 
-exports.validationFunction = (req, res, next) => {
-    const errors = validationResult(req)
-    if (errors.isEmpty()) {
-        next()
-    }
-    else {
-        return res.status(400).json({ error: errors.array()[0].msg })
-    }
+export const validationFunction = (req, res, next) => {
+  const errors = validationResult(req)
+  if (errors.isEmpty()) {
+    next()
+  }
+  else {
+    return res.status(400).json({ error: errors.array()[0].msg })
+  }
 };

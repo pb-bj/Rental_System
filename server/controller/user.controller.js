@@ -1,9 +1,7 @@
-const UserModel = require('../models/user.model');
-const bcrypt = require('bcryptjs');
-// const jwt = require('jsonwebtoken');
+import { User } from '../models/user.model.js';
+import bcrypt from 'bcryptjs'
 
-
-exports.registerUser = async (req, res) => {
+export const registerUser = async (req, res) => {
   try {
     const { email, fullname, password } = req.body;
 
@@ -15,13 +13,13 @@ exports.registerUser = async (req, res) => {
     }
 
     // check for exisiting user 
-    let exisitingUser = await UserModel.findOne({ email });
+    let exisitingUser = await User.findOne({ email });
     if (exisitingUser) {
       return res.status(400).json({ message: 'User Already Exists ' })
     }
 
     // create user
-    let user = await UserModel.create({ email, fullname, password: hashed_password })
+    let user = await User.create({ email, fullname, password: hashed_password })
     if (!user) {
       return res.status(400).json({ error: 'Failed to create user' });
     }
@@ -33,11 +31,11 @@ exports.registerUser = async (req, res) => {
 }
 
 
-exports.loginUser = async (req, res) => {
+export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await UserModel.findOne({ email });
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ error: 'Username not found' });
     }
@@ -53,4 +51,3 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-// const token = jwt.sign({ userId : user._id}, SECRECT_KEY, { expiresIn :'1hr'});

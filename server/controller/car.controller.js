@@ -1,6 +1,6 @@
-const CarModel = require('../models/car.model');
+import { Car } from "../models/car.model.js";
 
-exports.createNewCarDetails = async (req, res) => {
+export const createNewCarDetails = async (req, res) => {
     console.log(req.file)
     try {
         const { brand, model, plateNo, seats, carTypes, mileage, features, price } = req.body;
@@ -9,13 +9,13 @@ exports.createNewCarDetails = async (req, res) => {
         }
 
         // check for exisitng cars
-        let exisitngCars = await CarModel.findOne({ plateNo });
+        let exisitngCars = await Car.findOne({ plateNo });
         if (exisitngCars) {
             return res.status(400).json({ error: 'Car Already Exist' });
         }
 
         // creating a new cars
-        let addNewCars = await CarModel.create({
+        let addNewCars = await Car.create({
             brand,
             model,
             plateNo,
@@ -36,9 +36,9 @@ exports.createNewCarDetails = async (req, res) => {
 };
 
 // read 
-exports.getAllCars = async (req, res) => {
+export const getAllCars = async (req, res) => {
     try {
-        const cars = await CarModel.find();
+        const cars = await Car.find();
         if (!cars) {
             return res.status(400).json({ error: 'Something went wrong' });
         }
@@ -49,10 +49,10 @@ exports.getAllCars = async (req, res) => {
 }
 
 // update
-exports.updateCarDetails = async (req, res) => {
+export const updateCarDetails = async (req, res) => {
     try {
         const { brand, model, plateNo, seats, carTypes, mileage, features, price } = req.body;
-        let updateCars = await CarModel.findByIdAndUpdate(req.params.id, {
+        let updateCars = await Car.findByIdAndUpdate(req.params.id, {
             brand,
             model,
             plateNo,
@@ -78,9 +78,9 @@ exports.updateCarDetails = async (req, res) => {
 };
 
 // delete
-exports.deleteCarDetails = async (req, res) => {
+export const deleteCarDetails = async (req, res) => {
     try {
-        let deleteCarDetails = await CarModel.findByIdAndDelete(req.params.id);
+        let deleteCarDetails = await Car.findByIdAndDelete(req.params.id);
         if (!deleteCarDetails) {
             res.status(400).json({ error: 'Failed to delete car details' })
         } else {
@@ -92,9 +92,9 @@ exports.deleteCarDetails = async (req, res) => {
 }
 
 // single vehicle
-exports.getSingleCarDetail = async (req, res) => {
+export const getSingleCarDetail = async (req, res) => {
     try {
-        let car = await CarModel.findById(req.params.id);
+        let car = await Car.findById(req.params.id);
         if (!car) {
             return res.status(400).json({ error: 'Failed to provide car detail' });
         }
