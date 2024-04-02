@@ -40,18 +40,8 @@ const NewCarModel = ({ onCloseModel }) => {
       e.preventDefault()
   
       try {
-        
             await carPostRequest(formData);
             fetchAllCars()
-            // setBrand('');
-            // setModel('');
-            // setPlateNo('');
-            // setSeatsString('');
-            // setCarTypes('');
-            // setMileageString('');
-            // setFeatures('');
-            // setPriceString('');
-            // setImage('');
             onCloseModel(false);
             toast.success('Car added successfully',  {  duration: 3000 });
         } catch(error) {
