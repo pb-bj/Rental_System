@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const carSchema = new mongoose.Schema({
   brand: {
@@ -39,5 +39,4 @@ const carSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Car', carSchema);
-
+export const Car = mongoose.model('Car', carSchema);
