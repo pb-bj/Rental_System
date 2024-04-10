@@ -1,16 +1,14 @@
 import express from 'express';
 import cors from 'cors';
-// import 'dotenv/config';
-import dotenv from 'dotenv';
+import 'dotenv/config'
 import './database/connection.js';
 import cookieParser from 'cookie-parser';
 import carRoute from './routes/car.route.js';
 import usersRoute from './routes/user.route.js';
 import refreshRoute from './routes/refreshToken.route.js';
 
-dotenv.config()
-const app = express();
 const port = process.env.PORT || 8000;
+const app = express();
 
 // middlewares
 app.use(cors({
