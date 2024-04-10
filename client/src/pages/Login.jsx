@@ -2,25 +2,42 @@ import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components";
+import { loginPostRequest } from '../api/auth';
 
 const validationSchema = yup.object({
-  email : yup.string().required('* email is required').email('Invalid email format'),
-  password : yup.string().required('*password is required'),
+  email: yup.string().required('* email is required').email('Invalid email format'),
+  password: yup.string().required('*password is required'),
 }).required();
 
 const Login = () => {
-  const { register, handleSubmit, formState : {errors} } = useForm({
-    resolver : yupResolver(validationSchema),
-    defaultValues : {
-      email : '',
-      password : ''
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      email: '',
+      password: ''
     }
-  })
+  });
 
-  const onSubmit = (data) => console.log(data)
-   return (
+  const navigate = useNavigate()
+
+  const onSubmit = async (data) => {
+    try {
+      const result = await loginPostRequest(data);
+      if (result.success === true) {
+        console.log(result.message);
+        navigate('/vehicles');
+      } else {
+        navigate('/login');
+
+      }
+      // console.log('error');
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  return (
     <>
       <div
         className="d-flex flex-column justify-content-center align-items-center"
@@ -38,7 +55,7 @@ const Login = () => {
             </Link>
           </p>
         </div>
-        <form className="w-25" onSubmit={ handleSubmit(onSubmit)}>
+        <form className="w-25" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
             <label className="form-label">
               <b>Email</b>
@@ -50,7 +67,7 @@ const Login = () => {
               autoComplete="off"
               {...register('email')}
             />
-            { errors.email && <span className="text-danger" style={{ fontSize : '13px'}}>{errors.email.message}</span>}
+            {errors.email && <span className="text-danger" style={{ fontSize: '13px' }}>{errors.email.message}</span>}
           </div>
 
           <div className="mb-3">
@@ -63,7 +80,7 @@ const Login = () => {
               autoComplete="off"
               {...register('password')}
             />
-            { errors.password && <span className="text-danger" style={{ fontSize : '13px'}}>{errors.password.message}</span>}
+            {errors.password && <span className="text-danger" style={{ fontSize: '13px' }}>{errors.password.message}</span>}
           </div>
 
           <div className="d-grid gap-2 col-12 mx-auto">
