@@ -5,7 +5,7 @@ import * as yup from "yup"
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components";
 import { loginPostRequest } from '../api/auth';
-
+import { toast } from 'react-hot-toast'
 const validationSchema = yup.object({
   email: yup.string().required('* email is required').email('Invalid email format'),
   password: yup.string().required('*password is required'),
@@ -21,22 +21,23 @@ const Login = () => {
   });
 
   const navigate = useNavigate()
-
   const onSubmit = async (data) => {
     try {
       const result = await loginPostRequest(data);
-      if (result.success === true) {
-        console.log(result.message);
-        navigate('/vehicles');
-      } else {
-        navigate('/login');
 
+      if (result.status === 200) {
+        toast.success(`${result.data.message}`);
+        navigate('/vehicles');
+
+      } else {
+        toast.error(`${result.data.error}`)
       }
-      // console.log('error');
+
     } catch (err) {
-      console.log(err);
+      toast.error(err.message);
     }
-  }
+  };
+
   return (
     <>
       <div

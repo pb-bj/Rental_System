@@ -2,9 +2,10 @@ import { useForm } from "react-hook-form"
 import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components";
 import { registerPostRequest } from "../api/auth";
+import { toast } from 'react-hot-toast';
 
 const validationSchema = yup.object({
   fullname: yup.string().required('* fullname is required'),
@@ -24,20 +25,23 @@ const Register = () => {
     }
   });
 
+  const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
       const result = await registerPostRequest(data);
-      if (result.success === true) {
-        console.log('registered');
+
+      if (result.status === 200) {
+        toast.success(`${result.data.message}`);
+        navigate('/login');
+
       } else {
-        console.log('Failed');
+        toast.error(`${result.data.error}`)
       }
-    } catch (error) {
-      console.log(error);
+
+    } catch (err) {
+      toast.error(err.message);
     }
   };
-
-
   return (
     <>
       <div
