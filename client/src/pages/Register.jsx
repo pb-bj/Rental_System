@@ -4,27 +4,40 @@ import { yupResolver } from "@hookform/resolvers/yup"
 
 import { Link } from "react-router-dom";
 import { Button } from "../components";
+import { registerPostRequest } from "../api/auth";
 
 const validationSchema = yup.object({
-  fullName : yup.string().required('* fullname is required'),
-  email : yup.string().required('* email is required').email('Invalid email format'),
-  password : yup.string().required('*password is required'),
-  confirmPassword : yup.string().required('* password do not match')
+  fullname: yup.string().required('* fullname is required'),
+  email: yup.string().required('* email is required').email('Invalid email format'),
+  password: yup.string().required('*password is required'),
+  confirmPassword: yup.string().required('* password do not match')
 }).required()
 
 const Register = () => {
-  const { register, handleSubmit, formState : {errors} } = useForm({
-    resolver : yupResolver(validationSchema),
-    defaultValues : {
-      fullName : '',
-      email : '',
-      password : '',
-      confirmPassword :''
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      fullname: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
     }
   });
-  console.log('errors', errors)
-  
-  const onSubmit = (data) => console.log(data);
+
+  const onSubmit = async (data) => {
+    try {
+      const result = await registerPostRequest(data);
+      if (result.success === true) {
+        console.log('registered');
+      } else {
+        console.log('Failed');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
   return (
     <>
       <div
@@ -40,7 +53,7 @@ const Register = () => {
             </Link>
           </p>
         </div>
-        <form className="w-25" onSubmit={ handleSubmit(onSubmit) }>
+        <form className="w-25" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
             <label className="form-label">
               <b>Fullname</b>
@@ -49,9 +62,10 @@ const Register = () => {
               type="text"
               className="form-control shadow-none"
               placeholder="Fullname"
-              {...register('fullName')}
+              autoComplete="off"
+              {...register('fullname')}
             />
-            { errors.fullName && <span className="text-danger" style={{ fontSize : '13px'}}>{errors.fullName.message}</span>}
+            {errors.fullname && <span className="text-danger" style={{ fontSize: '13px' }}>{errors.fullname.message}</span>}
           </div>
           <div className="mb-3">
             <label className="form-label">
@@ -61,11 +75,12 @@ const Register = () => {
               type="email"
               className="form-control shadow-none"
               placeholder="Email"
+              autoComplete="off"
               {...register('email')}
             />
-            { errors.email && <span className="text-danger" style={{ fontSize : '13px'}}>{errors.email.message}</span>}
+            {errors.email && <span className="text-danger" style={{ fontSize: '13px' }}>{errors.email.message}</span>}
           </div>
-          
+
           <div className="mb-3">
             <label className="form-label">
               <b>Password</b>
@@ -74,9 +89,10 @@ const Register = () => {
               type="password"
               className="form-control shadow-none"
               placeholder="Password"
+              autoComplete="off"
               {...register('password')}
             />
-            { errors.password && <span className="text-danger" style={{ fontSize : '13px'}}>{errors.password.message}</span>}
+            {errors.password && <span className="text-danger" style={{ fontSize: '13px' }}>{errors.password.message}</span>}
           </div>
 
           <div className="mb-3">
@@ -87,13 +103,14 @@ const Register = () => {
               type="password"
               className="form-control shadow-none"
               placeholder="Confirm Password"
+              autoComplete="off"
               {...register('confirmPassword')}
             />
-            { errors.confirmPassword && <span className="text-danger" style={{ fontSize : '13px'}}>{errors.confirmPassword.message}</span>}
+            {errors.confirmPassword && <span className="text-danger" style={{ fontSize: '13px' }}>{errors.confirmPassword.message}</span>}
           </div>
 
           <div className="d-grid gap-2 col-12 mx-auto">
-          <Button title="Register" />
+            <Button title="Register" />
           </div>
         </form>
       </div>

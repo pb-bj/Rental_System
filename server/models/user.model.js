@@ -15,15 +15,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    phone: {
-        type: Number,
-        required: true,
-        unique: true,
-    },
     role: {
         type: String,
-        required: true,
-        default: "user"
+        enum: ['user', 'admin'],
+        default: 'user'
+    },
+    refreshToken: {
+        type: String
     }
 }, { timestamps: true });
 

@@ -37,6 +37,6 @@ const carSchema = new mongoose.Schema({
   image: {
     type: String,
   }
-});
+}, { timestamps: true });
 
 export const Car = mongoose.model('Car', carSchema);
