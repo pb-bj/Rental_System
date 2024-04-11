@@ -30,7 +30,7 @@ const Register = () => {
     try {
       const result = await registerPostRequest(data);
 
-      if (result.status === 200) {
+      if (result.status === 201) {
         toast.success(`${result.data.message}`);
         navigate('/login');
 
