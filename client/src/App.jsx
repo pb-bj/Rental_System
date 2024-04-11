@@ -11,20 +11,24 @@ import {
 
 import Layout from "./Layout/Layout";
 import { AdminDashboard, Bookings, CustomerDetails, DashboardContent, ManageCarsContent } from "./Admin/index";
-// import { useLoginContext } from './contexts/AuthContext';
-
+import PrivateRoute from "./PrivateRoute";
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/admin-panel" element={<AdminDashboard />}>
-          <Route path="dashboard" element={<DashboardContent />} />
-          <Route path="cars-details" element={<ManageCarsContent />} />
-          <Route path="bookings-details" element={<Bookings />} />
-          <Route path="customers-details" element={<CustomerDetails />} />
+
+        <Route element={<PrivateRoute />}>
+          <Route path="/admin-panel/dashboard" element={<AdminDashboard />}>
+            <Route path="dashboard" element={<DashboardContent />} />
+            <Route path="cars-details" element={<ManageCarsContent />} />
+            <Route path="bookings-details" element={<Bookings />} />
+            <Route path="customers-details" element={<CustomerDetails />} />
+          </Route>
         </Route>
+
+
 
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />} />

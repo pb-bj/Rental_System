@@ -5,7 +5,10 @@ import * as yup from "yup"
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components";
 import { loginPostRequest } from '../api/auth';
-import { toast } from 'react-hot-toast'
+import { toast } from 'react-hot-toast';
+import { jwtDecode } from 'jwt-decode';
+import { useAuth } from "../contexts/AuthContext";
+
 const validationSchema = yup.object({
   email: yup.string().required('* email is required').email('Invalid email format'),
   password: yup.string().required('*password is required'),
@@ -20,7 +23,8 @@ const Login = () => {
     }
   });
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { setAuth } = useAuth();
   const onSubmit = async (data) => {
     try {
       const result = await loginPostRequest(data);
@@ -28,6 +32,16 @@ const Login = () => {
       if (result.status === 200) {
         toast.success(`${result.data.message}`);
         navigate('/vehicles');
+
+        const token = jwtDecode(result.data.accessToken);
+        setAuth({
+          token: result.data.accessToken,
+          role: token.role
+        });
+
+        if (token.role === 'admin') {
+          return navigate('/admin-panel/dashboard');
+        }
 
       } else {
         toast.error(`${result.data.error}`)
