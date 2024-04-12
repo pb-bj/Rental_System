@@ -1,16 +1,16 @@
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { Navbar } from "../components";
-import { useAuth } from "../contexts/AuthContext";
+// import { useAuth } from "../contexts/AuthContext";
 
 const Layout = () => {
-  const { auth } = useAuth();
+  // const { auth } = useAuth();
   return (
     <div>
       <Navbar />
       <main className="mt-1">
-        {auth.role === 'user' ? <Outlet /> : <Navigate to="/login" replace />}
+        {/* {auth.role === 'user' ? <Outlet /> : <Navigate to="/login" replace />} */}
+        <Outlet />
       </main>
-      {/* <Footer /> */}
     </div>
   )
 }
