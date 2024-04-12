@@ -1,9 +1,15 @@
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import AdminImage from '../assets/Admin.png'
-import { DashboardSidebar } from './index'
+import { DashboardSidebar } from './index';
+import { useAuth } from '../contexts/AuthContext';
 
 const AdminDashboard = () => {
+  const { logout } = useAuth()
+
+  const handleLogout = () => {
+    logout()
+  }
   return (
     <section className="container-fluid overflow-hidden">
       <div className="row">
@@ -25,24 +31,24 @@ const AdminDashboard = () => {
                 aria-expanded="false"
               />
               <ul className="dropdown-menu" aria-labelledby="adminDropdown">
-                <li>
-                  <Link className="dropdown-item" to="#">
+                <li className='px-2'>
+                  <div>
                     Profile
-                  </Link>
+                  </div>
                 </li>
                 <li>
                   <hr className="dropdown-divider" />
                 </li>
-                <li>
-                  <Link className="dropdown-item" to="#">
+                <li className="px-2" style={{ cursor: 'pointer' }} onClick={handleLogout}>
+                  <div>
                     Logout
-                  </Link>
+                  </div>
                 </li>
               </ul>
             </div>
           </div>
           <div className="p-1">
-          <Outlet />
+            <Outlet />
           </div>
         </div>
       </div>

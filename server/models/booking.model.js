@@ -38,8 +38,7 @@ const bookingSchema = new mongoose.Schema({
         type: String,
         enum: ['eSewa', 'Khalti', 'FonePay'],
         require: true
-    },
-    m
+    }
 });
 
 export const Booking = mongoose.model('Booking', bookingSchema);
