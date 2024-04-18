@@ -6,6 +6,7 @@ import { Button } from "../components";
 import { loginPostRequest } from '../api/auth';
 import { toast } from 'react-hot-toast';
 import { useAuth } from "../contexts/AuthContext";
+import { useEffect } from "react";
 
 const validationSchema = yup.object({
   email: yup.string().required('* email is required').email('Invalid email format'),
@@ -22,7 +23,19 @@ const Login = () => {
   });
 
   const navigate = useNavigate();
-  const { setUserData } = useAuth();
+  const { userData, setTokenStorage } = useAuth();
+
+  useEffect(() => {
+    if (userData.role) { // Check if userData.role is not null or undefined
+      if (userData.role === 'user') {
+        navigate('/vehicles');
+      } else if (userData.role === 'admin') {
+        navigate('/admin-panel/dashboard/dashboard');
+      } else {
+        navigate('/login');
+      }
+    }
+  }, [userData, navigate]);
 
   const onSubmit = async (data) => {
     try {
@@ -30,19 +43,7 @@ const Login = () => {
 
       if (result.status === 200) {
         toast.success(`${result.data.message}`);
-        console.log(result.data)
-        setUserData({
-          fullname: result.data.fullname,
-          id: result.data.id,
-          role: result.data.role,
-        });
-        if (result.data.role === 'user') {
-          navigate('/vehicles');
-        } else if (result.data.role === 'admin') {
-          navigate('/admin-panel/dashboard/dashboard');
-        } else {
-          navigate('/login');
-        }
+        setTokenStorage(result.data.accessToken);
 
       } else {
         toast.error(`${result.data.error}`)
