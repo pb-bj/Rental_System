@@ -38,15 +38,13 @@ export const loginUser = async (req, res) => {
     if (!checkPassword) return res.status(401).json({ error: 'Wrong credentials' });
 
     // token 
-    const accessToken = jwt.sign({ id: user._id, email: user.email, role: user.role }, process.env.JWT_ACCESS_SECRET, { expiresIn: '30m' });
+    const accessToken = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_ACCESS_SECRET, { expiresIn: '30m' });
     const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '1d' });
 
-    user.refreshToken = refreshToken;
-    await user.save()
-
+    res.cookie('accessToken', accessToken, { httpOnly: true, maxAge: 30 * 60 * 1000 });
     res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
 
-    res.status(200).json({ success: true, message: 'Login successsful', accessToken, });
+    res.status(200).json({ success: true, message: 'Login successsful', id: user._id, fullname: user.fullname, role: user.role });
   } catch (err) {
     console.log(err)
     res.status(500).json({ success: false, error: 'Error while login' });
