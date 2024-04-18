@@ -2,10 +2,10 @@ import { useAuth } from "./contexts/AuthContext";
 import { Navigate, Outlet } from 'react-router-dom';
 
 const PrivateRoute = () => {
-    const { auth } = useAuth();
+    const { userData } = useAuth();
     return (
         <>
-            {auth.role === 'admin' ? <Outlet /> : <Navigate to='/login' replace />}
+            {userData.role === 'admin' ? <Outlet /> : <Navigate to='/login' replace />}
         </>
     )
 

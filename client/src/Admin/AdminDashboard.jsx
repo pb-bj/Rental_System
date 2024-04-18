@@ -5,7 +5,7 @@ import { DashboardSidebar } from './index';
 import { useAuth } from '../contexts/AuthContext';
 
 const AdminDashboard = () => {
-  const { logout } = useAuth()
+  const { logout, userData } = useAuth()
 
   const handleLogout = () => {
     logout()
@@ -19,7 +19,7 @@ const AdminDashboard = () => {
         {/* Main Content */}
         <div className="col-md-10">
           <div className="d-flex justify-content-between align-items-center p-3">
-            <h2 className="fs-5 ">Welcome User</h2>
+            <h2 className="fs-5 "><span className="text-secondary">Welcome</span> {userData.fullname}</h2>
             {/* Admin Avatar with Dropdown */}
             <div className="dropdown">
               <img

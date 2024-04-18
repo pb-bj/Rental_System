@@ -1,12 +1,10 @@
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components";
 import { loginPostRequest } from '../api/auth';
 import { toast } from 'react-hot-toast';
-import { jwtDecode } from 'jwt-decode';
 import { useAuth } from "../contexts/AuthContext";
 
 const validationSchema = yup.object({
@@ -24,23 +22,26 @@ const Login = () => {
   });
 
   const navigate = useNavigate();
-  const { setAuth } = useAuth();
+  const { setUserData } = useAuth();
+
   const onSubmit = async (data) => {
     try {
       const result = await loginPostRequest(data);
 
       if (result.status === 200) {
         toast.success(`${result.data.message}`);
-        navigate('/vehicles');
-
-        const token = jwtDecode(result.data.accessToken);
-        setAuth({
-          token: result.data.accessToken,
-          role: token.role
+        console.log(result.data)
+        setUserData({
+          fullname: result.data.fullname,
+          id: result.data.id,
+          role: result.data.role,
         });
-
-        if (token.role === 'admin') {
-          return navigate('/admin-panel/dashboard');
+        if (result.data.role === 'user') {
+          navigate('/vehicles');
+        } else if (result.data.role === 'admin') {
+          navigate('/admin-panel/dashboard/dashboard');
+        } else {
+          navigate('/login');
         }
 
       } else {

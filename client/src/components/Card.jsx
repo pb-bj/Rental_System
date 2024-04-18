@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
 import { Button } from './index';
 
-export const Card = ( { items }) => {
+export const Card = ({ items }) => {
     const { _id, brand, model, image, price, carTypes } = items
     return (
-        <div className='shadow-sm d-flex rounded border mb-3' style={{ cursor : 'pointer'}} key={_id}>
+        <div className='shadow-sm d-flex rounded border mb-3' style={{ cursor: 'pointer' }} key={_id}>
             <div className='col'>
-                <img  
-                    className="rounded-start" 
-                    style={{ maxWidth:'280px', height : '170px', width : '100%' }}
+                <img
+                    className="rounded-start"
+                    style={{ maxWidth: '280px', height: '170px', width: '100%' }}
                     src={`${import.meta.env.VITE_APP_BASE_URL}/${image}`} alt="" />
             </div>
             <div className='col-6 py-2 px-3'>
@@ -26,10 +26,9 @@ export const Card = ( { items }) => {
                 </div>
                 <div className='d-flex justify-content-between align-items-center'>
                     <Link to={`/vehicles/${_id}`}><Button title="View details" /></Link>
-                    {console.log(_id)}
                     <p className='fw-medium'>Rs {price}/ day</p>
                 </div>
-                <div className="text-decoration-underline text-end" style={{ fontSize : '11px'}}>excl. taxes & fees </div>
+                <div className="text-decoration-underline text-end" style={{ fontSize: '11px' }}>excl. taxes & fees </div>
             </div>
         </div>
     )
