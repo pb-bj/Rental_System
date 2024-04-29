@@ -6,7 +6,6 @@ import { Button } from "../components";
 import { loginPostRequest } from '../api/auth';
 import { toast } from 'react-hot-toast';
 import { useAuth } from "../contexts/AuthContext";
-import { useEffect } from "react";
 
 const validationSchema = yup.object({
   email: yup.string().required('* email is required').email('Invalid email format'),
@@ -23,19 +22,7 @@ const Login = () => {
   });
 
   const navigate = useNavigate();
-  const { userData, setTokenStorage } = useAuth();
-
-  useEffect(() => {
-    if (userData.role) { // Check if userData.role is not null or undefined
-      if (userData.role === 'user') {
-        navigate('/vehicles');
-      } else if (userData.role === 'admin') {
-        navigate('/admin-panel/dashboard/dashboard');
-      } else {
-        navigate('/login');
-      }
-    }
-  }, [userData, navigate]);
+  const { setAuthInfo } = useAuth();
 
   const onSubmit = async (data) => {
     try {
@@ -43,7 +30,26 @@ const Login = () => {
 
       if (result.status === 200) {
         toast.success(`${result.data.message}`);
-        setTokenStorage(result.data.accessToken);
+        console.log(result.data.accessToken)
+        console.log(result.data.user);
+
+        setAuthInfo(result.data);
+        // getToken(result.data.accessToken);
+        // setUserData({
+        //   id: result.data.user.id,
+        //   fullname: result.data.user.fullname,
+        //   role: result.data.user.role,
+        // })
+
+        if (result.data.user.role === 'user') {
+          return navigate('/vehicles');
+
+        } else if (result.data.user.role === 'admin') {
+          return navigate('/admin-panel/dashboard/dashboard');
+
+        } else {
+          console.log('error role');
+        }
 
       } else {
         toast.error(`${result.data.error}`)
