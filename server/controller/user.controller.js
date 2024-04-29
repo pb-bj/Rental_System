@@ -8,7 +8,7 @@ export const registerUser = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: 'Email alredy in use' });
+      return res.status(400).json({ error: 'Email already in use' });
     }
 
     let salt = await bcrypt.genSalt(10);
@@ -22,8 +22,8 @@ export const registerUser = async (req, res) => {
 
     res.status(201).json({ message: 'Registered Successful' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
     console.log(error);
+    res.status(500).json({ message: error.message });
   }
 }
 
@@ -39,12 +39,18 @@ export const loginUser = async (req, res) => {
 
     // token 
     const accessToken = jwt.sign({ id: user._id, fullname: user.fullname, role: user.role }, process.env.JWT_ACCESS_SECRET, { expiresIn: '1h' });
-    // const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '1d' });
+    res.cookie('token', accessToken, { httpOnly: true, maxAge: Date.now() + 1 * 60 * 60 * 1000 })
 
     res.status(200).json({
       success: true,
       message: 'Login successsful',
-      accessToken
+      accessToken,
+      user: {
+        id: user._id,
+        fullname: user.fullname,
+        role: user.role
+      }
+
     });
 
   } catch (err) {

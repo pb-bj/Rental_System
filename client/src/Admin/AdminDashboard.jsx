@@ -5,11 +5,10 @@ import { DashboardSidebar } from './index';
 import { useAuth } from '../contexts/AuthContext';
 
 const AdminDashboard = () => {
-  const { logout, userData } = useAuth()
+  const { authData, userLoggedOut } = useAuth()
 
-  const handleLogout = () => {
-    logout()
-  }
+  const handleLogout = () => userLoggedOut();
+
   return (
     <section className="container-fluid overflow-hidden">
       <div className="row">
@@ -19,7 +18,7 @@ const AdminDashboard = () => {
         {/* Main Content */}
         <div className="col-md-10">
           <div className="d-flex justify-content-between align-items-center p-3">
-            <h2 className="fs-5 "><span className="text-secondary">Welcome</span> {userData.fullname}</h2>
+            <h2 className="fs-5 "><span className="text-secondary">Welcome</span> {authData?.fullname}</h2>
             {/* Admin Avatar with Dropdown */}
             <div className="dropdown">
               <img
@@ -39,8 +38,8 @@ const AdminDashboard = () => {
                 <li>
                   <hr className="dropdown-divider" />
                 </li>
-                <li className="px-2" style={{ cursor: 'pointer' }} onClick={handleLogout}>
-                  <div>
+                <li className="px-2" style={{ cursor: 'pointer' }}>
+                  <div onClick={handleLogout}>
                     Logout
                   </div>
                 </li>

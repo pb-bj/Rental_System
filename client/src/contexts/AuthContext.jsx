@@ -1,58 +1,46 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { jwtDecode } from 'jwt-decode';
+import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-    const [userData, setUserData] = useState({
-        fullname: null,
-        id: null,
-        role: null,
-    });
-
+    const [authToken, setAuthToken] = useState(null);
+    const [authData, setAuthData] = useState(null);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                const decodedToken = jwtDecode(token);
-                setUserData({
-                    fullname: decodedToken.fullname,
-                    id: decodedToken.id,
-                    role: decodedToken.role,
-                });
-            } catch (error) {
-                console.error("Token decoding failed:", error);
-                localStorage.removeItem('token');  // In case the token is invalid or expired
-            }
+        // storing the localStorage data when components mounts for user 
+        const storedAuthToken = localStorage.getItem('x-token')
+        const storedAuthData = JSON.parse(localStorage.getItem('x-user'));
+
+        if (storedAuthData && storedAuthToken) {
+            setAuthData(storedAuthData);
+            setAuthToken(storedAuthToken);
         }
     }, []);
 
-    const setTokenStorage = (authToken) => {
-        if (authToken) {
-            localStorage.setItem('token', authToken);
-            const decodedToken = jwtDecode(authToken);
-            setUserData({
-                fullname: decodedToken.fullname,
-                id: decodedToken.id,
-                role: decodedToken.role,
-            });
-        } else {
-            // Clear user data if no token is provided
-            localStorage.removeItem('token');  // Clear token from localStorage
-            setUserData({
-                fullname: null,
-                id: null,
-                role: null,
-            });
-        }
-    }
 
-    const logout = () => {
-        return localStorage.removeItem('token');
-    }
+    // storing the token and user data in localStorage.
+    const setAuthInfo = (data) => {
+        const { accessToken, user } = data;
+        localStorage.setItem('x-token', accessToken);
+        localStorage.setItem('x-user', JSON.stringify(user));
 
-    return <AuthContext.Provider value={{ userData, setTokenStorage, logout }}>
+        setAuthToken({ token: accessToken });
+        setAuthData({
+            id: user.id,
+            fullname: user.fullname,
+            role: user.role
+        });
+    };
+
+    const userLoggedOut = () => {
+        localStorage.removeItem('x-token');
+        localStorage.removeItem('x-user');
+
+        setAuthData(null);
+        setAuthToken(null);
+    };
+
+    return <AuthContext.Provider value={{ setAuthInfo, authToken, authData, userLoggedOut }}>
         {children}
     </AuthContext.Provider>
 };
