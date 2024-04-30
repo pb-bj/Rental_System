@@ -12,3 +12,15 @@ export const userDetails = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+export const loggedCustomerCount = async (req, res) => {
+    try {
+        const totalCustomerCount = await User.countDocuments({ role: 'user' });
+        if (!totalCustomerCount) return res.status(400).json({ error: 'Failed to get customer count' });
+
+        res.status(200).json({ message: 'Customer Count', totalCustomerCount });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
