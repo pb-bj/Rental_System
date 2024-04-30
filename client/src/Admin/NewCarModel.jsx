@@ -4,9 +4,13 @@ import { useState } from 'react';
 import { carPostRequest } from '../api/cars';
 import { FormInput } from '../components/index';
 import { useFetchCars } from '../contexts/CarContext';
+import { useAuth } from '../contexts/AuthContext';
 // import { validateCarDetails } from '../../utils/validate'
 
 const NewCarModel = ({ onCloseModel }) => {
+  const { authToken } = useAuth();
+  const { fetchAllCars, addNewCars } = useFetchCars();
+
   const [brand, setBrand] = useState('');
   const [model, setModel] = useState('');
   const [plateNo, setPlateNo] = useState('');
@@ -17,7 +21,6 @@ const NewCarModel = ({ onCloseModel }) => {
   const [priceString, setPriceString] = useState('');
   const [image, setImage] = useState(null);
   // const [ errorMessage, setErrorMessage ] = useState({});
-  const { fetchAllCars } = useFetchCars()
   // const notify = () => toast('Car added');
 
   const seats = Number(seatsString);
@@ -40,8 +43,9 @@ const NewCarModel = ({ onCloseModel }) => {
     e.preventDefault()
 
     try {
-      await carPostRequest(formData);
+      const newCarDetails = await carPostRequest(formData, authToken.token);
       fetchAllCars()
+      addNewCars(newCarDetails);
       onCloseModel(false);
       toast.success('Car added successfully', { duration: 3000 });
     } catch (error) {

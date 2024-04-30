@@ -1,7 +1,6 @@
 import { Car } from "../models/car.model.js";
 
 export const createNewCarDetails = async (req, res) => {
-    console.log(req.file)
     try {
         const { brand, model, plateNo, seats, carTypes, mileage, features, price } = req.body;
         if (!req.file) {
@@ -73,6 +72,7 @@ export const updateCarDetails = async (req, res) => {
         }
         res.json({ message: 'Updated Successfully' })
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };

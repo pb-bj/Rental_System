@@ -11,12 +11,16 @@ export const CarProvider = ({ children }) => {
         setCars(carResults);
     }
 
+    const addNewCars = (newCars) => {
+        setCars((prevCars) => [...prevCars, newCars]);
+    }
+
     useEffect(() => {
         fetchAllCars();
     }, []);
 
 
-    return <CarContext.Provider value={{ cars, setCars, fetchAllCars }}>{children}</CarContext.Provider>
+    return <CarContext.Provider value={{ cars, setCars, fetchAllCars, addNewCars }}>{children}</CarContext.Provider>
 };
 
 export const useFetchCars = () => {
