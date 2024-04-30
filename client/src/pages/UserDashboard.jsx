@@ -1,7 +1,12 @@
+import { useAuth } from "../contexts/AuthContext";
 
 const UserDashboard = () => {
+  const { authData } = useAuth();
+
   return (
-    <div className="mt-5 pt-5">UserDashboard</div>
+    <section className='container' style={{ marginTop: '95px' }}>
+      <h5>Hi, {authData?.fullname}</h5>
+    </section>
   )
 }
 
