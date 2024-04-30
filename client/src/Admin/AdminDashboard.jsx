@@ -18,7 +18,11 @@ const AdminDashboard = () => {
         {/* Main Content */}
         <div className="col-md-10">
           <div className="d-flex justify-content-between align-items-center p-3">
-            <h2 className="fs-5 "><span className="text-secondary">Welcome</span> {authData?.fullname}</h2>
+            <h2 className="fs-5 w-75"><span className="text-secondary ">Welcome</span> {authData?.fullname}</h2>
+            <div className="d-flex justify-content-end align-items-end w-75 fs-5 me-5" style={{ cursor: 'pointer' }}>
+              <i className="bi bi-bell"></i>
+            </div>
+
             {/* Admin Avatar with Dropdown */}
             <div className="dropdown">
               <img
@@ -30,14 +34,6 @@ const AdminDashboard = () => {
                 aria-expanded="false"
               />
               <ul className="dropdown-menu" aria-labelledby="adminDropdown">
-                <li className='px-2'>
-                  <div>
-                    Profile
-                  </div>
-                </li>
-                <li>
-                  <hr className="dropdown-divider" />
-                </li>
                 <li className="px-2" style={{ cursor: 'pointer' }}>
                   <div onClick={handleLogout}>
                     Logout
@@ -46,6 +42,7 @@ const AdminDashboard = () => {
               </ul>
             </div>
           </div>
+
           <div className="p-1">
             <Outlet />
           </div>
