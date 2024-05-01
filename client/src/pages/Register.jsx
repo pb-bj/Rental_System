@@ -57,7 +57,7 @@ const Register = () => {
             </Link>
           </p>
         </div>
-        <form className="w-25" onSubmit={handleSubmit(onSubmit)}>
+        <form className="col-sm-3" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
             <label className="form-label">
               <b>Fullname</b>

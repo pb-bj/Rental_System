@@ -9,7 +9,7 @@ const Vehicles = () => {
             <p>({cars.length}) cars available</p>
             <div className='row '>
                 {cars.map((car) => (
-                    <div className='col-6' key={car._id}>
+                    <div className='col-12 col-sm-6' key={car._id}>
                         <Card items={car} />
                     </div>
                 ))}

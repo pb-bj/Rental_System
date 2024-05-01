@@ -7,19 +7,28 @@ const UserDropDown = ({ onClose }) => {
         <>
             <div
                 className="mt-11 border p-3 rounded list-unstyled bg-body-tertiary"
-                style={{ cursor: 'pointer', marginTop: '58px', width: '165px', position: 'absolute', top: '0', right: '125px' }}
+                style={{
+                    zIndex: '999',
+                    cursor: 'pointer',
+                    marginTop: '58px',
+                    width: '165px',
+                    position: 'absolute',
+                    top: '0',
+                    right: '125px'
+                }}
                 onClick={() => onClose(false)}
             >
                 <li className='px-1 py-2'>
                     {authData.role === 'user' ?
-                        <Link to="/user/dashboard" className='text-decoration-none text-black'>My Garage</Link> : <Link to="/admin-panel/dashboard/dashboard" className='text-decoration-none text-black'>Admin Garage</Link>
+                        <Link to="/user/dashboard" className='text-decoration-none text-black'>My Garage</Link> :
+                        <Link to="/admin-panel/dashboard/dashboard" className='text-decoration-none text-black'>Admin Garage</Link>
                     }
                 </li>
                 <li className='px-1 py-2' onClick={() => userLoggedOut()}>Logout</li>
-
-            </div >
+            </div>
         </>
     )
 }
 
-export default UserDropDown
+export default UserDropDown;
+
