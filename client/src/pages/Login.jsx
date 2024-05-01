@@ -34,12 +34,6 @@ const Login = () => {
         console.log(result.data.user);
 
         setAuthInfo(result.data);
-        // getToken(result.data.accessToken);
-        // setUserData({
-        //   id: result.data.user.id,
-        //   fullname: result.data.user.fullname,
-        //   role: result.data.user.role,
-        // })
 
         if (result.data.user.role === 'user') {
           return navigate('/vehicles');
@@ -78,7 +72,7 @@ const Login = () => {
             </Link>
           </p>
         </div>
-        <form className="w-25" onSubmit={handleSubmit(onSubmit)}>
+        <form className="col-sm-2" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
             <label className="form-label">
               <b>Email</b>
