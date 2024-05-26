@@ -7,6 +7,7 @@ import carRoute from './routes/car.route.js';
 import usersRoute from './routes/user.route.js';
 import refreshRoute from './routes/refreshToken.route.js';
 import userInfoRoute from './routes/userInfo.route.js';
+import bookingRoute from './routes/booking.route.js';
 
 const port = process.env.PORT || 8000;
 const app = express();
@@ -26,6 +27,7 @@ app.use("/api/auth", usersRoute);
 app.use('/api', refreshRoute);
 app.use("/api", carRoute);
 app.use("/api", userInfoRoute);
+app.use("/api", bookingRoute);
 app.use('/public/uploads', express.static('public/uploads'));
 
 app.listen(port, () => {
