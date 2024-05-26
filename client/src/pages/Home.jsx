@@ -1,4 +1,5 @@
 import bannerImage from '../assets/car-banner-bg.jpg';
+// import { CarSearchBox } from '../components';
 
 const Home = () => {
   return (
@@ -11,7 +12,11 @@ const Home = () => {
           alt="Man inside vehicle"
         />
         <div className='position-absolute w-50 text-white' style={{ top: '30%', left: '25%' }}>
-          <h1 className="text-center">BOOK ANY CAR WITH <br /><span className="fw-bold" style={{ color: "#BF40BF" }}>LOW PRICE</span></h1></div>
+          <h1 className="text-center">BOOK ANY CAR WITH <br /><span className="fw-bold" style={{ color: "#BF40BF" }}>LOW PRICE</span></h1>
+        </div>
+      </div>
+      <div className='position-absolute w-50 text-white' style={{ top: '50%', left: '25%' }}>
+        {/* <CarSearchBox /> */}
       </div>
     </section >
   )

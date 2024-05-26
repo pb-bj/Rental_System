@@ -5,5 +5,6 @@ import { FormInput } from "./FormInput";
 import { Card } from './Card';
 import { Features } from "./Features";
 import UserDropDown from "./UserDropDown";
+import CarSearchBox from "./CarSearchBox";
 
-export { Navbar, Footer, Button, FormInput, Card, Features, UserDropDown }
+export { Navbar, Footer, Button, FormInput, Card, Features, UserDropDown, CarSearchBox }
