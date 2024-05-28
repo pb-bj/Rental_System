@@ -4,6 +4,7 @@ import { Car } from "./car.model.js";
 const bookingSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     cars: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Car', required: true }],
+    bookingDate : { type: Date, default: Date.now },
     license: { type: String, required: true },
     address: { type: String, required: true },
     tripStartDate: { type: Date, required: true },
@@ -11,29 +12,6 @@ const bookingSchema = new mongoose.Schema({
     totalPrice: { type: Number },
     isCancelled : { type: Boolean, default: false }
 }, { timestamps: true });
-
-// pre hooks before the saving into database
-// bookingSchema.pre('save', async function (next) {
-//     try {
-//         const totalTripDays = Math.ceil((this.tripEndDate - this.tripStartDate) / (1000 * 60 * 60 * 24)); // trips calculated with millisecond so
-//         console.log('Total Days:', totalTripDays);
-//         let totalPrice = 0;
-        
-//         this.cars.forEach(async (carId) => {
-//             const car = await Car.findById(carId);
-//             console.log('Cars:', car);
-//             if (!car) {
-//                 console.error('Car not found');
-//             }
-//             totalPrice += car.price * totalTripDays;
-//         });
-//         this.totalPrice = totalPrice;
-//         console.log('Total price :', totalPrice);
-//     } catch (err) {
-//         next(err)
-//     }
-
-// })
 
 bookingSchema.pre('save', async function (next) {
   try {

@@ -60,11 +60,9 @@ export const allBookingDetails = async (req, res) => {
             .populate('user', 'fullname, email')
             .populate('cars')
         
-        const totalBookingCount = await Booking.countDocuments();
+        if (bookings.length == 0) return res.status(400).json({ error: 'Booking are empty' });
 
-        if (bookings.length == 0 || totalBookingCount == 0 ) return res.status(400).json({ error: 'Booking are empty' });
-
-        res.status(200).json({ bookings, totalBookingCount });
+        res.status(200).json({ bookings });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: error.message });
@@ -90,6 +88,40 @@ export const bookingCancellation = async (req, res) => {
 
         res.status(200).json({ message: 'Booking Cancelled', booking });
 
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: err.message });
+    }
+}
+
+// for admin
+export const allBookingCount = async (req, res) => {
+    try {
+        const totalBookingCount = await Booking.countDocuments();
+        if (!totalBookingCount || totalBookingCount.length == 0) {
+            return res.status(400).json({ message: 'No booking yet or empty booking' });
+        }
+
+        res.status(200).json({ bookingCount : totalBookingCount })
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: err.message });
+    }
+}
+
+export const userBookingCount = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        console.log('user-id', userId)
+
+        const totalBookingCount = await Booking.countDocuments({ user: userId });
+        console.log('user-booking', totalBookingCount)
+        
+        if (!totalBookingCount || totalBookingCount.length == 0) {
+            return res.status(400).json({ message: 'No booking yet' });
+        }
+
+        res.status(200).json({ bookingCount : totalBookingCount })
     } catch (err) {
         console.log(err);
         return res.status(500).json({ message: err.message });
