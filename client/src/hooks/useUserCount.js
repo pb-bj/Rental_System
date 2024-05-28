@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { userCountRequest } from '../api/user';
+import { userCountRequest, userBookingCountRequest } from '../api/user';
 import { useAuth } from '../contexts/AuthContext';
 
 export const useUserCount = () => {
     const [userCounts, setUserCounts] = useState(0);
+    const [userBookingCounts, setUserBookingCounts] = useState(0);
     const { authToken } = useAuth();
 
     useEffect(() => {
@@ -11,6 +12,9 @@ export const useUserCount = () => {
             try {
                 const users = await userCountRequest(authToken.token);
                 setUserCounts(users.totalCustomerCount);
+
+                const bookings = await userBookingCountRequest(authToken.token);
+                setUserBookingCounts(bookings.bookingCounts);
             } catch (error) {
                 console.log(error);
             }
@@ -19,5 +23,5 @@ export const useUserCount = () => {
         getUserCount();
     }, []);
 
-    return { userCounts }
+    return { userCounts, userBookingCounts }
 }
