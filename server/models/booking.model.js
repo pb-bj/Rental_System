@@ -9,6 +9,7 @@ const bookingSchema = new mongoose.Schema({
     address: { type: String, required: true },
     tripStartDate: { type: Date, required: true },
     tripEndDate: { type: Date, required: true },
+    totalDays: { type: Number },
     totalPrice: { type: Number },
     isCancelled : { type: Boolean, default: false }
 }, { timestamps: true });
@@ -37,6 +38,7 @@ bookingSchema.pre('save', async function (next) {
 
     console.log('Total price:', totalPrice);
     this.totalPrice = totalPrice;
+    this.totalDays = totalDays;
     next();
   } catch (err) {
     next(err);

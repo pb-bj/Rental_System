@@ -32,14 +32,18 @@ export const bookingDetails = async (req, res) => {
 // single user booking details
 export const singleUserBookingDetails = async (req, res) => {
     try {   
-        const userId = req.user._id;
-        if ( !req.user || !mongoose.Types.ObjectId.isValid(userId)) {
-            return res.status(400).json({ error: 'Invalid User id' });
+        // const userId = req.user._id;
+        const bookingId = req.params.id;
+        // console.log('Id', bookingId)
+         
+        if (!mongoose.Types.ObjectId.isValid(bookingId)) {
+            return res.status(400).json({ error: 'Invalid booking ID' });
         }
 
-        const userBookings = await Booking.find({ user: userId })
+        const userBookings = await Booking.findById(bookingId)
             .populate('user', 'fullname, email')
             .populate('cars')
+        // console.log('Booking hai: ', userBookings);
 
         if (userBookings.length == 0) {
             return res.status(400).json({ error: 'Booking empty' });
