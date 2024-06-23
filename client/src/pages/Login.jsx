@@ -39,7 +39,7 @@ const Login = () => {
           return navigate('/vehicles');
 
         } else if (result.data.user.role === 'admin') {
-          return navigate('/admin-panel/dashboard/dashboard');
+           navigate('/admin-panel/dashboard/dashboard');
 
         } else {
           console.log('error role');

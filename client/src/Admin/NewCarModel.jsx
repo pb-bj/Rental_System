@@ -49,7 +49,12 @@ const NewCarModel = ({ onCloseModel }) => {
       onCloseModel(false);
       toast.success('Car added successfully', { duration: 3000 });
     } catch (error) {
-      console.error(error);
+      if (error.repsonse && error.response.data.error === 'Car Already Exist') {
+          toast.error('plate number already exists.', { duration: 3000 });
+      } else {
+         console.error('Error adding car:', error);
+         toast.error('Failed to add car. Please try again later.', { duration: 3000 });
+      }
     }
 
   }

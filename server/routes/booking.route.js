@@ -7,7 +7,8 @@ const router = express.Router();
 
 router.post('/car-booking', isAuthenticated, isUser, bookingRules, validationFunction, bookingDetails);
 
-router.get('/car-booking/user/:id', isAuthenticated, isUser, singleUserBookingDetails);
+router.get('/car-booking/user', isAuthenticated, isUser, singleUserBookingDetails);
+// router.get('/car-booking/user/:id', isAuthenticated, singleUserBookingDetails);
 router.get('/car-booking/admin/all', isAuthenticated, isAdmin, allBookingDetails);
 
 router.delete('/car-booking/cancellation/:id', isAuthenticated, isUser, bookingCancellation);

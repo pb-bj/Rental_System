@@ -60,4 +60,12 @@ export const loginUser = async (req, res) => {
   }
 };
 
-
+export const logoutUser = async (req, res) => {
+  try {
+    res.clearCookie('token', { httpOnly: true })
+    res.status(200).json({ message: 'Logout Successful' });
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ error: 'Error while logout' });
+  }
+}

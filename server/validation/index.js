@@ -24,15 +24,21 @@ export const loginRules = [
 
 export const bookingRules = [
   
-   check('license')
-    .matches(/^\d{2}-\d{2}-\d{8}$/)
-    .withMessage('License must be in the format xx-xx-xxxxxxxx and contain only numbers and hyphens.'),
+  //  check('license')
+  //   .matches(/^\d{2}-\d{2}-\d{8}$/)
+  //   .withMessage('License must be in the format xx-xx-xxxxxxxx and contain only numbers and hyphens.'),
    
   check('address')
     .exists({ checkNull: true })
     .withMessage('Address is required')
     .isString()
     .withMessage('Address must be a string'),
+  
+  check('location')
+    .exists({ checkNull: true })
+    .withMessage('Location is required')
+    .isString()
+    .withMessage('Location must be a string'),
   
   check('tripStartDate')
     .isISO8601()

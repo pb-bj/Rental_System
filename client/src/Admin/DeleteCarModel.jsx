@@ -8,14 +8,10 @@ const DeleteCarModel = ({ onCloseModel, deleteId }) => {
     const { authToken } = useAuth();
 
     const handleConfirmDelete = async () => {
-        const deleteResult = await deleteCarItem(deleteId, authToken.token);
+        await deleteCarItem(deleteId, authToken.token);
         fetchAllCars();
         onCloseModel(false);
         toast.success('Deleted Successfully');
-
-        if (!deleteResult) {
-            return toast.error('Something went wrong');
-        }
     }
 
     return (

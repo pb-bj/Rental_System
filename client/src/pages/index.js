@@ -5,6 +5,7 @@ import UserDashboard from './UserDashboard';
 import NotFoundPage from './NotFoundPage';
 import Vehicles from './Vehicles';
 import SingleVehicle from './SingleVehicle';
+import UserBookingProcess from './UserBookingProcess';
 
 export {
     Login,
@@ -13,5 +14,6 @@ export {
     UserDashboard,
     NotFoundPage,
     Vehicles,
-    SingleVehicle    
+    SingleVehicle,
+    UserBookingProcess
 }

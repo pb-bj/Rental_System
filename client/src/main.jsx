@@ -4,24 +4,17 @@ import App from './App.jsx';
 import { Toaster } from 'react-hot-toast';
 import AuthProvider from './contexts/AuthContext.jsx';
 import { CarProvider } from './contexts/CarContext.jsx';
-// import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-// const queryClient = new QueryClient();
-
-import store from './app/store.js';
-import { Provider } from 'react-redux';
+import BookingProvider from './contexts/BookingContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* <QueryClientProvider client={queryClient}> */}
-    <Provider store={store}>
       <AuthProvider>
         <Toaster />
+          <BookingProvider>
         <CarProvider>
-          <App />
+            <App />
         </CarProvider>
+            </BookingProvider>
       </AuthProvider>
-    </Provider>
-    {/* </QueryClientProvider> */}
   </React.StrictMode>,
 )

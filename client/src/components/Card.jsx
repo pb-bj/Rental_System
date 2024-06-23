@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Button } from './index';
 
 export const Card = ({ items }) => {
-    const { _id, brand, model, image, price, carTypes } = items;
+    const { _id, brand, model, image, price, carTypes, isAvailable } = items;
     return (
         <div className='shadow-sm rounded border mb-3' style={{ cursor: 'pointer' }} key={_id}>
             <div className='row'>
@@ -13,10 +13,15 @@ export const Card = ({ items }) => {
                         style={{ height: '100%', width: '100%', objectFit: 'cover' }}
                     />
                 </div>
-                <div className='col-12 col-md'>
+                <div className='col-12 col-md flex'>
                     <div className='p-3'>
                         <span className='fw-lighter'>{brand}</span>
                         <h5 className='fw-bold mb-3'>{model}</h5>
+                        {isAvailable ?
+                            <span className="bg-success text-white px-2 py-1 rounded" style={{ fontSize: '13.5px' }}>available</span>
+                            : <span className="bg-danger text-white px-2 py-1 rounded" style={{ fontSize: '13.5px' }}>unavailable</span>
+                        }
+
                         <div className='d-flex justify-content-between m-2'>
                             <span>
                                 4.91 {""}
