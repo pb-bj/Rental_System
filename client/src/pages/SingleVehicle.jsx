@@ -1,21 +1,32 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getSingleCar } from "../api/cars";
 import { Features } from "../components/index";
 
 const SingleVehicle = () => {
     const { carId } = useParams();
+    const navigate = useNavigate();
     const [carDetails, setCarDetails] = useState({});
+    console.log(carDetails)
     const [bookingData, setBookingData] = useState({
         tripStartDate: '',
-        tripStartTime: '',
         tripEndDate: '',
-        tripEndTime: '',
         pickupLocation: '',
     });
 
     const handleBookingData = (e) => {
         setBookingData({ ...bookingData, [e.target.name]: e.target.value })
+    }
+    
+    // for submitting the data to another page 
+    const handleSubmitbookingDetails = (e) => {
+        e.preventDefault();
+        navigate('/vehicles/booking', {
+            state: {
+                bookingData,
+                carDetails,
+            }
+        });
     }
 
     useEffect(() => {
@@ -29,10 +40,7 @@ const SingleVehicle = () => {
         }
         fetchSingleCar()
     }, [carId]);
-
-    const bookingDetails = (bookingData) => {
-        console.log(bookingData)
-    }
+    
 
     return (
         <section className="container mt-5">
@@ -49,8 +57,10 @@ const SingleVehicle = () => {
                             {/* Left Section */}
                             <div className="col-md-12 col-lg-7">
                                 <div className="p-4">
+                                     
                                     <h3 className="fw-bold">{carDetails.brand}</h3>
                                     <h4 className="fw-normal">{carDetails.model}</h4>
+                                    
                                     <Features
                                         features={carDetails.features}
                                         seats={carDetails.seats}
@@ -62,41 +72,55 @@ const SingleVehicle = () => {
 
                             {/* Right Section */}
                             <div className="col-md-12 col-lg-5">
-                                <div className="p-4">
-                                    <div className="mt-4">
+                                <form className="p-4">
+                                    <div className="mt-4 d-flex justify-content-between ">
+                                        <div>
                                         <h5 className="fw-bold">Rs {carDetails.price} <span className="fw-light fs-6">/day</span></h5>
                                         <p className="text-muted" style={{ fontSize: '13px' }}>excl. taxes & fees</p>
+                                        </div>
+                                        <div>
+                                         {carDetails.isAvailable ?
+                                            <span className="bg-success text-white px-2 py-1 rounded" style={{ fontSize: '13.5px' }}>available</span>
+                                            : <span className="bg-danger text-white px-2 py-1 rounded" style={{ fontSize: '13.5px' }}>unavailable</span>}   
+                                       </div>
                                     </div>
                                     <div className="mb-3">
                                         <span className="fw-bold">Trip starts</span>
                                         <div className="row">
-                                            <div className="col-6">
-                                                <input type="date" className="form-control shadow-none p-2" name="tripStartDate" onChange={handleBookingData} />
+                                            <div className="col">
+                                                <input type="date" className="form-control shadow-none p-2" name="tripStartDate" value={bookingData.tripStartDate }  onChange={handleBookingData} />
                                             </div>
-                                            <div className="col-6">
+                                            {/* <div className="col-6">
                                                 <input type="time" className="form-control shadow-none p-2" name="tripStartTime" onChange={handleBookingData} />
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                     <div className="mb-3">
                                         <span className="fw-bold">Trip ends</span>
                                         <div className="row">
-                                            <div className="col-6">
-                                                <input type="date" className="form-control shadow-none p-2" name="tripEndDate" onChange={handleBookingData} />
+                                            <div className="col">
+                                                <input type="date" className="form-control shadow-none p-2" name="tripEndDate" value={bookingData.tripEndDate} onChange={handleBookingData} />
                                             </div>
-                                            <div className="col-6">
+                                            {/* <div className="col-6">
                                                 <input type="time" className="form-control shadow-none p-2" name="tripEndTime" onChange={handleBookingData} />
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                     <div className="mb-3">
                                         <span className="fw-bold">Pickup & return location</span>
-                                        <input type="text" className="form-control shadow-none p-2" name="pickupLocation" onChange={handleBookingData} />
+                                        <input type="text" className="form-control shadow-none p-2" name="pickupLocation" value={bookingData.pickupLocation} onChange={handleBookingData} />
                                     </div>
-                                    <div className="d-grid gap-2">
-                                        <button className="btn btn-primary" onClick={() => bookingDetails(bookingData)}>Book</button>
-                                    </div>
-                                </div>
+                                        <div className="d-grid gap-2" >
+                                        <button
+                                            type="button"
+                                            className="btn text-white"
+                                            style={{ backgroundColor: "#8134A6" }}
+                                            onClick={handleSubmitbookingDetails}
+                                            disabled={!carDetails.isAvailable}
+                                            
+                                        >Book now</button>
+                                        </div>
+                                </form>
                             </div>
                         </div>
                     </div>

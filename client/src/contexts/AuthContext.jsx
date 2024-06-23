@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { instance } from "../api/instance";
 
 const AuthContext = createContext();
 
@@ -13,7 +14,7 @@ const AuthProvider = ({ children }) => {
 
         if (storedAuthData && storedAuthToken) {
             setAuthData(storedAuthData);
-            setAuthToken(storedAuthToken);
+            setAuthToken({ token : storedAuthToken });
         }
     }, []);
 
@@ -32,9 +33,15 @@ const AuthProvider = ({ children }) => {
         });
     };
 
-    const userLoggedOut = () => {
+    const userLoggedOut = async () => {
+        try {
+            await instance.post('/api/auth/logout')
+        } catch (err) {
+            console.log('Error when logout', err);
+        }
         localStorage.removeItem('x-token');
         localStorage.removeItem('x-user');
+        // localStorage.removeItem('user-bookings');
 
         setAuthData(null);
         setAuthToken(null);
