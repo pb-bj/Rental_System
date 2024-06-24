@@ -18,6 +18,7 @@ import BookingDetails from "./Admin/BookingDetails";
 
 const App = () => {
   const { authData } = useAuth();
+  console.log(authData)
   return (
     <Router>
       <Routes>
@@ -41,7 +42,7 @@ const App = () => {
           <Route path="/vehicles/:carId" element={ authData ? <SingleVehicle /> : <Navigate to='/login' replace />} />
           <Route path="/vehicles/booking" element={ authData && authData?.role === 'user' ? <UserBookingProcess /> : <Navigate to="/login" replace /> } />
 
-          <Route path="/user/dashboard" element={ authData && authData?.role === 'user' ? <UserDashboard /> : <Navigate to="/" replace />} />
+          <Route path="/user/dashboard" element={ authData?.role === 'user' && <UserDashboard /> } />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

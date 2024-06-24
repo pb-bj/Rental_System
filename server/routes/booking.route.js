@@ -11,7 +11,7 @@ router.get('/car-booking/user', isAuthenticated, isUser, singleUserBookingDetail
 // router.get('/car-booking/user/:id', isAuthenticated, singleUserBookingDetails);
 router.get('/car-booking/admin/all', isAuthenticated, isAdmin, allBookingDetails);
 
-router.delete('/car-booking/cancellation/:id', isAuthenticated, isUser, bookingCancellation);
+router.post('/car-booking/cancellation/:id', isAuthenticated, isUser, bookingCancellation);
 
 router.get('/car-booking/all-booking-count', isAuthenticated, isAdmin, allBookingCount);
 router.get('/car-booking/user-booking-count', isAuthenticated, isUser, userBookingCount );

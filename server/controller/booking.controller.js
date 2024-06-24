@@ -135,15 +135,17 @@ export const bookingCancellation = async (req, res) => {
     try {
         const bookingId = req.params.id;
         const userId = req.user._id;
+        const { reasonForCancellation } = req.body;
 
         if (!bookingId || !userId) return res.status(400).json({ error: 'Invalid ID' });
-        
+
         const booking = await Booking.findOne({ _id: bookingId, user: userId });
             if (!booking || booking.isCancelled) {
                 return res.status(400).json({ error: 'Booking not found or already cancelled' });
         }
         
         booking.isCancelled = true;
+        booking.cancellationReason = reasonForCancellation;
         await booking.save();
         console.log("Cancelled", booking.isCancelled);
 
