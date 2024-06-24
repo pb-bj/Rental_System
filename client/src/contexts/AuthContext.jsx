@@ -8,7 +8,7 @@ const AuthProvider = ({ children }) => {
     const [authData, setAuthData] = useState(null);
 
     useEffect(() => {
-        // storing the localStorage data when components mounts for user 
+        // storing the localStorage data when components mounts for user
         const storedAuthToken = localStorage.getItem('x-token')
         const storedAuthData = JSON.parse(localStorage.getItem('x-user'));
 
@@ -19,7 +19,7 @@ const AuthProvider = ({ children }) => {
     }, []);
 
 
-    // storing the token and user data in localStorage.
+    // retieving the data and then storing the token and user data in localStorage.
     const setAuthInfo = (data) => {
         const { accessToken, user } = data;
         localStorage.setItem('x-token', accessToken);
@@ -41,7 +41,6 @@ const AuthProvider = ({ children }) => {
         }
         localStorage.removeItem('x-token');
         localStorage.removeItem('x-user');
-        // localStorage.removeItem('user-bookings');
 
         setAuthData(null);
         setAuthToken(null);
@@ -57,3 +56,5 @@ export const useAuth = () => {
 }
 
 export default AuthProvider;
+
+

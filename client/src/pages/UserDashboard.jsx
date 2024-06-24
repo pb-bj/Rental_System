@@ -5,8 +5,11 @@ import emptyBookingImage from '../assets/empty.png';
 
 const UserDashboard = () => {
   const { authData } = useAuth();
-  const { userBookings } = useBooking();
+  const { userBookings, isLoading, error } = useBooking();
 
+  if (isLoading) return <p>Loading...</p>
+  if (error) return <p>{ error }</p>
+  
   if (!userBookings || userBookings.length === 0) {
     return (
       <section className="container" style={{ marginTop: '95px' }}>
@@ -19,6 +22,7 @@ const UserDashboard = () => {
       </section>
     )
   }
+  
   return (
     <section className='container' style={{ marginTop: '95px' }}>
       <h5>Hi, {authData?.fullname}</h5>

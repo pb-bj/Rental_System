@@ -51,22 +51,22 @@ const ManageCarsContent = () => {
           </thead>
           <tbody>
             {cars.map((car, i) => (
-              <tr key={car._id}>
+              <tr key={car?._id}>
                 <td style={{ fontSize: '13px' }}>{i + 1}</td>
-                <td style={{ fontSize: '13px' }}>{car.brand}</td>
-                <td style={{ fontSize: '13px' }}>{car.model}</td>
-                <td style={{ fontSize: '13px' }}>{car.plateNo}</td>
-                <td style={{ fontSize: '13px' }}>{car.seats}</td>
-                <td style={{ fontSize: '13px' }}>{car.carTypes}</td>
-                <td style={{ fontSize: '13px' }}>{car.mileage}</td>
-                <td style={{ fontSize: '13px' }}>{car.features}</td>
-                <td style={{ fontSize: '13px' }}>{car.price}</td>
+                <td style={{ fontSize: '13px' }}>{car?.brand}</td>
+                <td style={{ fontSize: '13px' }}>{car?.model}</td>
+                <td style={{ fontSize: '13px' }}>{car?.plateNo}</td>
+                <td style={{ fontSize: '13px' }}>{car?.seats}</td>
+                <td style={{ fontSize: '13px' }}>{car?.carTypes}</td>
+                <td style={{ fontSize: '13px' }}>{car?.mileage}</td>
+                <td style={{ fontSize: '13px' }}>{car?.features}</td>
+                <td style={{ fontSize: '13px' }}>{car?.price}</td>
                 <td>
                   <div className="d-flex justify-content-around align-items-center gap-2">
-                    <div onClick={() => handleDelete(car._id)}>
+                    <div onClick={() => handleDelete(car?._id)}>
                       <i className="bi bi-trash fs-5" style={{ color: "red", cursor: "pointer" }}></i>
                     </div>
-                    <div onClick={() => handleUpdateModel(car._id)}>
+                    <div onClick={() => handleUpdateModel(car?._id)}>
                       <i className="bi bi-pencil-square" style={{ color: "green", cursor: "pointer" }}></i>
                     </div>
                   </div>
