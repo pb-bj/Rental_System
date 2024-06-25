@@ -13,7 +13,7 @@ const bookingSchema = new mongoose.Schema({
     totalPrice: { type: Number },
     location: { type: String },
     isCancelled: { type: Boolean, default: false },
-  cancellationReason: { type: String,  required: false}
+    cancellationReason: { type: String }
 }, { timestamps: true });
 
 bookingSchema.pre('save', async function (next) {

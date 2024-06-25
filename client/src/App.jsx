@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   Home,
   NotFoundPage,
@@ -15,6 +15,7 @@ import { AdminDashboard, Bookings, CustomerBookingDetails, DashboardContent, Man
 import PrivateRoute from "./PrivateRoute";
 import { useAuth } from "./contexts/AuthContext";
 import BookingDetails from "./Admin/BookingDetails";
+import UserPrivateRoute from "./UserPrivateRoute";
 
 const App = () => {
   const { authData } = useAuth();
@@ -37,12 +38,13 @@ const App = () => {
         </Route>
 
         <Route path="/" element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/vehicles" element={<Vehicles />} />
-          <Route path="/vehicles/:carId" element={ authData ? <SingleVehicle /> : <Navigate to='/login' replace />} />
-          <Route path="/vehicles/booking" element={ authData && authData?.role === 'user' ? <UserBookingProcess /> : <Navigate to="/login" replace /> } />
-
-          <Route path="/user/dashboard" element={ authData?.role === 'user' && <UserDashboard /> } />
+        <Route path="/" element={<Home />} />
+          <Route element={<UserPrivateRoute />}>
+            <Route path="/vehicles" element={<Vehicles />} />
+              <Route path="/vehicles/:carId" element={<SingleVehicle />} />
+              <Route path="/vehicles/booking" element={<UserBookingProcess />} />
+              <Route path="/user/dashboard" element={<UserDashboard />} />
+          </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
