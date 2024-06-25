@@ -2,15 +2,16 @@ import { useAuth } from "../contexts/AuthContext";
 import { useBooking } from "../contexts/BookingContext";
 import { formatedDate } from '../utils/formatedDate';
 import emptyBookingImage from '../assets/empty.png';
+import { CancelReasoningBox } from "../components";
+import { useState } from "react";
 
 const UserDashboard = () => {
   const { authData } = useAuth();
-  const { userBookings, isLoading, error } = useBooking();
+  const { userBookings } = useBooking();
+  const [showCancelBox, setShowCancelBox] = useState(false);
 
-  if (isLoading) return <p>Loading...</p>
-  if (error) return <p>{ error }</p>
-  
-  if (!userBookings || userBookings.length === 0) {
+  console.log(userBookings)
+  if (!userBookings || userBookings.length === 0 || userBookings.isCancelled ) {
     return (
       <section className="container" style={{ marginTop: '95px' }}>
         <h5>Hi, {authData?.fullname}</h5>
@@ -45,6 +46,7 @@ const UserDashboard = () => {
         <tbody>
             {userBookings?.map((booking, i) => (
               <tr key={booking?._id}>
+                { console.log('id:', booking._id)}
                 <td style={{ fontSize: '13px' }}>{i + 1}</td>
                 <td style={{ fontSize: '13px' }}>{formatedDate(booking?.bookingDate)}</td>
                 <td style={{ fontSize: '13px' }}>{booking?.car?.brand}</td>
@@ -57,8 +59,9 @@ const UserDashboard = () => {
                 <td style={{ fontSize: '13px' }}>{booking?.car?.price}</td>
                 <td style={{ fontSize: '13px' }}>{booking?.totalPrice}</td>
                 <td style={{ fontSize: '13px' }}>
-                  <button className="btn btn-danger">Cancel</button>
+                  <button className="btn btn-danger" onClick={() => setShowCancelBox(true)}>Cancel</button>
                 </td>
+                {showCancelBox && <CancelReasoningBox onClose={() => setShowCancelBox(false)} bookingId={booking._id } />}
               </tr>
             ))}
           </tbody>

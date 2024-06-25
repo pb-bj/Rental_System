@@ -10,11 +10,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
       <AuthProvider>
         <Toaster />
-          <BookingProvider>
         <CarProvider>
+          <BookingProvider>
             <App />
-        </CarProvider>
             </BookingProvider>
+        </CarProvider>
       </AuthProvider>
   </React.StrictMode>,
 )
