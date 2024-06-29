@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getSingleCar } from "../api/cars";
 import { Features } from "../components/index";
+import { validateBooking } from "../utils/validate";
 
 const SingleVehicle = () => {
     const { carId } = useParams();
@@ -13,20 +14,35 @@ const SingleVehicle = () => {
         tripEndDate: '',
         pickupLocation: '',
     });
+     const [errors, setErrors] = useState({
+        tripStartDate: '',
+        tripEndDate: '',
+        pickupLocation: '',
+    });
 
     const handleBookingData = (e) => {
         setBookingData({ ...bookingData, [e.target.name]: e.target.value })
     }
     
+    
     // for submitting the data to another page 
     const handleSubmitbookingDetails = (e) => {
         e.preventDefault();
-        navigate('/vehicles/booking', {
-            state: {
-                bookingData,
-                carDetails,
-            }
-        });
+
+        const validation = validateBooking(bookingData);
+        console.log(bookingData)
+        if (Object.keys(validation).length === 0) {
+            navigate('/vehicles/booking', {
+                state: {
+                    bookingData,
+                    carDetails,
+                }
+            })
+        } else {
+            console.log('error', validation)
+            setErrors(validation);
+        }
+
     }
 
     useEffect(() => {
@@ -89,10 +105,9 @@ const SingleVehicle = () => {
                                         <div className="row">
                                             <div className="col">
                                                 <input type="date" className="form-control shadow-none p-2" name="tripStartDate" value={bookingData.tripStartDate }  onChange={handleBookingData} />
+                                                 {errors.tripStartDate && <div className="text-danger" style={{ fontSize: '13px' }}>{errors.tripStartDate}</div>}
                                             </div>
-                                            {/* <div className="col-6">
-                                                <input type="time" className="form-control shadow-none p-2" name="tripStartTime" onChange={handleBookingData} />
-                                            </div> */}
+                                          
                                         </div>
                                     </div>
                                     <div className="mb-3">
@@ -100,15 +115,15 @@ const SingleVehicle = () => {
                                         <div className="row">
                                             <div className="col">
                                                 <input type="date" className="form-control shadow-none p-2" name="tripEndDate" value={bookingData.tripEndDate} onChange={handleBookingData} />
+                                                {errors.tripEndDate && <div className="text-danger" style={{ fontSize: '13px' }}>{errors.tripEndDate}</div>}
                                             </div>
-                                            {/* <div className="col-6">
-                                                <input type="time" className="form-control shadow-none p-2" name="tripEndTime" onChange={handleBookingData} />
-                                            </div> */}
+                                          
                                         </div>
                                     </div>
                                     <div className="mb-3">
                                         <span className="fw-bold">Pickup & return location</span>
                                         <input type="text" className="form-control shadow-none p-2" name="pickupLocation" value={bookingData.pickupLocation} onChange={handleBookingData} />
+                                        {errors.pickupLocation && <div className="text-danger" style={{ fontSize: '13px' }}>{errors.pickupLocation}</div>}
                                     </div>
                                         <div className="d-grid gap-2" >
                                         <button
@@ -131,6 +146,3 @@ const SingleVehicle = () => {
 }
 
 export default SingleVehicle;
-
-
-

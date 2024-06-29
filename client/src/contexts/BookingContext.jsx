@@ -1,5 +1,5 @@
 import { useContext, createContext, useEffect, useState } from "react"
-import { getUserBookingsRequest } from "../api/booking";
+import { getUserBookingsRequest, bookingCancellation } from "../api/booking";
 import { useAuth } from "./AuthContext";
 
 const BookingContext = createContext();
@@ -8,22 +8,36 @@ const BookingProvider = ({ children }) => {
     const [ userBookings, setUserBookings ] = useState([]);
     const { authToken } = useAuth();
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            if (!authToken) return;
-            try {
-                const data = await getUserBookingsRequest(authToken.token);
-                setUserBookings(data.bookings);
-                console.log('single user bookings ', data.bookings);
-            } catch (err) {
-                console.log(err);
-            }
+    const fetchUserData = async () => {
+        if (!authToken) return;
+        try {
+            const data = await getUserBookingsRequest(authToken.token);
+            setUserBookings(data.bookings);
+        } catch (err) {
+            console.log(err);
         }
+    }
+
+    useEffect(() => {
             fetchUserData();
-        }, [authToken])
-    
+    }, [authToken])
+
+    const cancelBooking = async (bookingId, cancelReason) => {
+        try {
+            setUserBookings((prevBookings) => {
+                prevBookings.map((booking) => {
+                return booking.id === bookingId ? {...booking,  isCancelled: true } : booking
+            })})
+        } catch (err) {
+            console.log(err);
+            console.error('Error cancelling booking:', err);
+            fetchUserData(); // in case of cancellation failed
+        }
+        await bookingCancellation(bookingId, cancelReason, authToken.token);
+        await fetchUserData() // refetching the data after cancellation
+    }
   return (
-      <BookingContext.Provider value={{ userBookings  }}>{children}</BookingContext.Provider>
+      <BookingContext.Provider value={{ userBookings, cancelBooking  }}>{children}</BookingContext.Provider>
   )
 }
 

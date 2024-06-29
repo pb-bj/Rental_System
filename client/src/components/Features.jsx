@@ -5,12 +5,12 @@ export const Features = ({ brand, model, features, seats, carTypes, mileage }) =
             <h1 className="fw-bold fs-1">{model}</h1>
             <span className="fw-lighter text-secondary ">Type : {carTypes}</span>
             <div className="mt-4">
-                <span className="fs-5 fw-bold">4.91 </span>{""}
+                {/* <span className="fs-5 fw-bold">4.91 </span>{""}
                 <i className="bi bi-star-fill text-warning"></i>
                 <i className="bi bi-star-fill text-warning"></i>
                 <i className="bi bi-star-fill text-warning"></i>
                 <i className="bi bi-star-fill text-warning"></i>
-                {""} (10 trips)
+                {""} (10 trips) */}
             </div>
             <div className=" d-flex justify-content-between align-items-center mt-4 col-6">
                 <div>

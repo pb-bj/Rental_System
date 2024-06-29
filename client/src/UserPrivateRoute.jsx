@@ -3,9 +3,7 @@ import { useAuth } from "./contexts/AuthContext";
 
 const UserPrivateRoute = () => {
     const { authData } = useAuth();
-    return (
-        <>{ authData ? <Outlet /> : <Navigate to='/login' replace />}</>
-  )
+    return authData ? <Outlet /> : <Navigate to='/login' replace /> 
 }
 
 export default UserPrivateRoute

@@ -22,33 +22,84 @@ export const loginRules = [
   check('password').exists().withMessage('Password is required.')
 ];
 
-export const bookingRules = [
+// export const bookingRules = [
   
-  //  check('license')
-  //   .matches(/^\d{2}-\d{2}-\d{8}$/)
-  //   .withMessage('License must be in the format xx-xx-xxxxxxxx and contain only numbers and hyphens.'),
+//   //  check('license')
+//   //   .matches(/^\d{2}-\d{2}-\d{8}$/)
+//   //   .withMessage('License must be in the format xx-xx-xxxxxxxx and contain only numbers and hyphens.'),
    
-  check('address')
-    .exists({ checkNull: true })
-    .withMessage('Address is required')
-    .isString()
-    .withMessage('Address must be a string'),
+//   check('address')
+//     .exists({ checkNull: true })
+//     .withMessage('Address is required')
+//     .isString()
+//     .withMessage('Address must be a string'),
   
-  check('location')
-    .exists({ checkNull: true })
-    .withMessage('Location is required')
-    .isString()
-    .withMessage('Location must be a string'),
+//   check('location')
+//     .exists({ checkNull: true })
+//     .withMessage('Location is required')
+//     .isString()
+//     .withMessage('Location must be a string'),
   
-  check('tripStartDate')
+//   check('tripStartDate')
+//     .isISO8601()
+//     .withMessage('tripStartDate must be a valid date in ISO 8601 format.')
+//     .toDate(),
+
+//   check('tripEndDate')
+//     .isISO8601()
+//     .withMessage('tripEndDate must be a valid date in ISO 8601 format.')
+//     .toDate(),
+// ];
+
+export const bookingRules = [
+  check('bookingDate')
+    .optional({ nullable: true })
     .isISO8601()
-    .withMessage('tripStartDate must be a valid date in ISO 8601 format.')
+    .withMessage('Booking date must be a valid date in ISO 8601 format')
+    .toDate(),
+
+  check('license')
+    .optional({ nullable: true })
+    .isString()
+    .withMessage('License must be a string'),
+
+  check('dob')
+    .notEmpty().withMessage('Date of birth is required')
+    .isISO8601().withMessage('Invalid date format. Date of birth must be in ISO 8601 format (YYYY-MM-DD)'),
+  
+   check('gender')
+    .notEmpty().withMessage('Gender is required')
+    .isIn(['male', 'female']).withMessage('Invalid gender. Must be one of: male or female'),
+
+  check('tripStartDate')
+    .exists({ checkNull: true, checkFalsy: true })
+    .withMessage('Trip start date is required')
+    .isISO8601()
+    .withMessage('Trip start date must be a valid date in ISO 8601 format')
     .toDate(),
 
   check('tripEndDate')
+    .exists({ checkNull: true, checkFalsy: true })
+    .withMessage('Trip end date is required')
     .isISO8601()
-    .withMessage('tripEndDate must be a valid date in ISO 8601 format.')
-    .toDate(), 
+    .withMessage('Trip end date must be a valid date in ISO 8601 format')
+    .toDate(),
+
+
+  check('totalPrice')
+    .optional({ nullable: true })
+    .isNumeric()
+    .withMessage('Total price must be a number'),
+
+  check('location')
+    .optional({ nullable: true })
+    .isString()
+    .withMessage('Location must be a string'),
+
+  check('cancellationReason')
+    .optional({ nullable: true })
+    .isString()
+    .withMessage('Cancellation reason must be a string')
 ];
 
 export const validationFunction = (req, res, next) => {

@@ -23,13 +23,13 @@ export const Card = ({ items }) => {
                         }
 
                         <div className='d-flex justify-content-between m-2'>
-                            <span>
+                            {/* <span>
                                 4.91 {""}
                                 <i className="bi bi-star-fill text-warning"></i>
                                 <i className="bi bi-star-fill text-warning"></i>
                                 <i className="bi bi-star-fill text-warning"></i>
                                 <i className="bi bi-star-fill text-warning"></i>
-                            </span>
+                            </span> */}
                             <span >type : {carTypes.toLowerCase()}</span>
                         </div>
                         <div className='d-flex justify-content-between align-items-center'>

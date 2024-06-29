@@ -13,13 +13,11 @@ import {
 import Layout from "./Layout/Layout";
 import { AdminDashboard, Bookings, CustomerBookingDetails, DashboardContent, ManageCarsContent } from "./Admin/index";
 import PrivateRoute from "./PrivateRoute";
-import { useAuth } from "./contexts/AuthContext";
 import BookingDetails from "./Admin/BookingDetails";
 import UserPrivateRoute from "./UserPrivateRoute";
 
 const App = () => {
-  const { authData } = useAuth();
-  console.log(authData)
+  
   return (
     <Router>
       <Routes>

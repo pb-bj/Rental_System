@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 export const bookingDetails = async (req, res) => {
     try {
-        const { license, address, tripStartDate, tripEndDate, location, carId, totalPrice } = req.body;
+        const { license, tripStartDate, tripEndDate, location, carId, totalPrice, dob, gender } = req.body;
         const user = req.user._id;
 
         // Checking for valid carId
@@ -39,14 +39,16 @@ export const bookingDetails = async (req, res) => {
         const booking = new Booking({
             user,
             license,
-            address,
             tripStartDate,
             tripEndDate,
             location,
+            dob,
+            gender,
             car: carId,
             totalPrice: actualCalculatedPrice,
+           
         });
-
+        console.log(booking)
         await booking.save();
 
         car.isAvailable = false;
@@ -88,7 +90,10 @@ export const allBookingDetails = async (req, res) => {
         
         if (bookings.length == 0) return res.status(400).json({ error: 'Booking are empty' });
 
-        res.status(200).json({ bookings });
+        const activeBookingDetails = bookings.filter((booking) => !booking.isCancelled);
+        const cancelledBookingDetails = bookings.filter((booking) => booking.isCancelled);
+
+        res.status(200).json({ bookings, activeBookingDetails, cancelledBookingDetails});
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: error.message });
@@ -99,11 +104,14 @@ export const allBookingDetails = async (req, res) => {
 export const allBookingCount = async (req, res) => {
     try {
         const totalBookingCount = await Booking.countDocuments();
+        const totalCancelledBookingCount = await Booking.countDocuments({ isCancelled: true });
+        const totalActiveBookingCount = await Booking.countDocuments({ isCancelled: false });
+
         if (!totalBookingCount || totalBookingCount.length == 0) {
             return res.status(400).json({ message: 'No booking yet or empty booking' });
         }
 
-        res.status(200).json({ bookingCount : totalBookingCount })
+        res.status(200).json({ bookingCount : totalBookingCount, totalActiveBookingCount, totalCancelledBookingCount })
     } catch (err) {
         console.log(err);
         return res.status(500).json({ message: err.message });
@@ -149,12 +157,28 @@ export const bookingCancellation = async (req, res) => {
         await booking.save();
         console.log("Cancelled", booking.isCancelled);
 
-        const car = await Car.findById( booking.car ) // from the booking car Id 
+        const car = await Car.findById(booking.car) // from the booking car Id 
+        if (car) {
             car.isAvailable = true;
             car.save();
+        }
 
         res.status(200).json({ message: 'Booking Cancelled', booking  });
 
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: err.message });
+    }
+}
+
+//for admin revenue amount 
+export const totalRevenue = async (req, res) => {
+    try {
+        const bookings = await Booking.find({ isCancelled: false  });
+
+        const totalRevenue = bookings.reduce((acc, booking) => acc + booking.totalPrice, 0);
+        console.log("Total Revenue Amount: ", totalRevenue);
+        res.status(200).json({ totalRevenue });
     } catch (err) {
         console.log(err);
         return res.status(500).json({ message: err.message });
