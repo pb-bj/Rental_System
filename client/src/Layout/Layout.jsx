@@ -7,7 +7,7 @@ const Layout = () => {
   return (
     <div>
       <Navbar />
-      <main style={{ marginTop: '95px' }}>
+      <main style={{ marginTop: '55px' }}>
         {/* {auth.role === 'user' ? <Outlet /> : <Navigate to="/login" replace />} */}
         <Outlet />
       </main>

@@ -193,7 +193,8 @@ const UserBookingProcess = () => {
             <div className="col-12">
                <button
                 type="submit"
-                className="btn btn-primary"
+                className='btn text-white'
+                style={{ backgroundColor: "#8134A6" }}
                 disabled={!isFormValid || bookingSubmitted}
               >
                 {bookingSubmitted ? 'Booking Submitted' : 'Confirm Booking'}

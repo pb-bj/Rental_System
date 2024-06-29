@@ -5,7 +5,7 @@ import { Button } from '../components/index';
 
 const Home = () => {
   return (
-    <section style={{ marginTop: '55px' }}>
+    <section style={{ marginTop: '0px' }}>
       <div className="postion-relative">
         <img
           className='img-fluid w-100 mw-100 object-fit-cover'
