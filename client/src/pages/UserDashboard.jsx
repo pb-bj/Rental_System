@@ -3,15 +3,29 @@ import { useBooking } from "../contexts/BookingContext";
 import { formatedDate } from '../utils/formatedDate';
 import emptyBookingImage from '../assets/empty.png';
 import { CancelReasoningBox } from "../components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const UserDashboard = () => {
   const { authData } = useAuth();
   const { userBookings } = useBooking();
   const [showCancelBox, setShowCancelBox] = useState(false);
+  const [activeBooking, setActiveBooking] = useState([]);
+  const [selectedBookingId, setSelectedBookingId] = useState(null);
 
-  console.log(userBookings)
-  if (!userBookings || userBookings.length === 0 || userBookings.isCancelled ) {
+  useEffect(() => {
+    if (userBookings) {
+      const active = userBookings.filter(booking => !booking.isCancelled);
+      setActiveBooking(active);
+    }
+      
+  }, [userBookings])
+
+  const handleCancelBooking = (bookingId) => {
+    setSelectedBookingId(bookingId);
+    setShowCancelBox(true)
+  }
+
+  if (!activeBooking.length ) {
     return (
       <section className="container" style={{ marginTop: '95px' }}>
         <h5>Hi, {authData?.fullname}</h5>
@@ -44,9 +58,8 @@ const UserDashboard = () => {
             </tr>
                   </thead>
         <tbody>
-            {userBookings?.map((booking, i) => (
+            {activeBooking?.map((booking, i) => (
               <tr key={booking?._id}>
-                { console.log('id:', booking._id)}
                 <td style={{ fontSize: '13px' }}>{i + 1}</td>
                 <td style={{ fontSize: '13px' }}>{formatedDate(booking?.bookingDate)}</td>
                 <td style={{ fontSize: '13px' }}>{booking?.car?.brand}</td>
@@ -59,9 +72,14 @@ const UserDashboard = () => {
                 <td style={{ fontSize: '13px' }}>{booking?.car?.price}</td>
                 <td style={{ fontSize: '13px' }}>{booking?.totalPrice}</td>
                 <td style={{ fontSize: '13px' }}>
-                  <button className="btn btn-danger" onClick={() => setShowCancelBox(true)}>Cancel</button>
+                  {/* <button className="btn btn-danger" onClick={() => handleCancelBooking(booking._id) }>Cancel</button> */}
+                    {!booking.isCancelled ? (
+                                        <button className="btn btn-danger" onClick={() => handleCancelBooking(booking._id)}>Cancel</button>
+                                    ) : (
+                                        <span className="text-muted">Cancelled</span>
+                                    )}
                 </td>
-                {showCancelBox && <CancelReasoningBox onClose={() => setShowCancelBox(false)} bookingId={booking._id } />}
+                {showCancelBox && <CancelReasoningBox onClose={() => setShowCancelBox(false)} bookingId={ selectedBookingId } />}
               </tr>
             ))}
           </tbody>

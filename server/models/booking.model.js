@@ -6,7 +6,8 @@ const bookingSchema = new mongoose.Schema({
     car: { type: mongoose.Schema.Types.ObjectId, ref: 'Car', required: true },
     bookingDate: { type: Date, default: Date.now },
     license: { type: String, required: true, unique: true },
-    address: { type: String, required: true },
+    dob: { type: Date, required: true }, 
+    gender: { type: String, enum: ['male', 'female'], required: true },
     tripStartDate: { type: Date, required: true },
     tripEndDate: { type: Date, required: true },
     totalTripDays: { type: Number },
@@ -18,16 +19,24 @@ const bookingSchema = new mongoose.Schema({
 
 bookingSchema.pre('save', async function (next) {
   try {
-    const totalTripDays = Math.ceil((this.tripEndDate - this.tripStartDate) / (1000 * 60 * 60 * 24)) + 1;
-    const car = await Car.findById(this.car);
 
-    if (!car) {
-      console.error('Car not found');
-      return next(new Error('Car not found'));
+    if (this.isCancelled && !this.isCancelled) {
+      return next(new Error('Cancel reason is required'));
     }
 
-    this.totalPrice = car.price * totalTripDays;
-    this.totalTripDays = totalTripDays;
+    if (!this.isCancelled) {
+      const totalTripDays = Math.ceil((this.tripEndDate - this.tripStartDate) / (1000 * 60 * 60 * 24)) + 1;
+      const car = await Car.findById(this.car);
+  
+      if (!car) {
+        console.error('Car not found');
+        return next(new Error('Car not found'));
+      }
+  
+      this.totalPrice = car.price * totalTripDays;
+      this.totalTripDays = totalTripDays;
+      
+    }
     next();
   } catch (err) {
     next(err);
