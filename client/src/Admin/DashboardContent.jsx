@@ -12,8 +12,16 @@ const DashboardContent = () => {
   
   return (
     <div className="container">
-      <h2 className="fw-semibold">Your total revenue</h2>
-      <span className="fs-2 fw-bold bgGradient">Rs {totalRevenue || 0 }</span>
+      <div className="d-flex justify-space-between gap-5 ">
+        <div>
+          <h2 className="fw-semibold">Your total revenue</h2>
+          <span className="fs-2 fw-bold bgGradient">Rs {totalRevenue || 0 }</span>
+        </div>
+         <div>
+          <h2>Refunded Amount</h2>
+          <span className="fs-2 fw-bold text-danger">Rs 0</span>
+        </div>
+      </div>
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mt-4">
         <DashboardCard title="Total Orders" context={bookingCounts || 0} />
         <DashboardCard title="Bookings" context={activeBookingCounts || 0} />

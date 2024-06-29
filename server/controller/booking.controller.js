@@ -154,6 +154,11 @@ export const bookingCancellation = async (req, res) => {
         
         booking.isCancelled = true;
         booking.cancellationReason = reasonForCancellation;
+
+        // for refund calculation
+        const refundAmount = booking.totalPrice; 
+        booking.refundAmount = refundAmount;
+
         await booking.save();
         console.log("Cancelled", booking.isCancelled);
 
@@ -163,7 +168,7 @@ export const bookingCancellation = async (req, res) => {
             car.save();
         }
 
-        res.status(200).json({ message: 'Booking Cancelled', booking  });
+        res.status(200).json({ message: 'Booking Cancelled', booking, refundAmount  });
 
     } catch (err) {
         console.log(err);
@@ -174,10 +179,18 @@ export const bookingCancellation = async (req, res) => {
 //for admin revenue amount 
 export const totalRevenue = async (req, res) => {
     try {
-        const bookings = await Booking.find({ isCancelled: false  });
-
-        const totalRevenue = bookings.reduce((acc, booking) => acc + booking.totalPrice, 0);
+        const bookings = await Booking.find({ isCancelled: false });
+    
+        // const totalRevenue = bookings.reduce((acc, booking) => acc + booking.totalPrice, 0);
+          const totalRevenue = bookings.reduce((acc, booking) => {
+            if (!booking.isCancelled) {
+                return acc + booking.totalPrice;
+            } else {
+                return acc - booking.refundAmount;
+            }
+        }, 0);
         console.log("Total Revenue Amount: ", totalRevenue);
+        console.log('Refunded amount', totalRevenue);
         res.status(200).json({ totalRevenue });
     } catch (err) {
         console.log(err);

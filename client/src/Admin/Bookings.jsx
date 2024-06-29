@@ -26,8 +26,6 @@ const Bookings = () => {
               <th>Price</th>
               <th>Total Amt</th>
               <th>Status</th> 
-              <th>Action</th> 
-            
             </tr>
           </thead>
         <tbody>

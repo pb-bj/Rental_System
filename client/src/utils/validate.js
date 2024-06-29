@@ -1,19 +1,19 @@
 import { differenceInYears, parseISO } from 'date-fns';
 
-export const validateCarDetails = ({ brand, model, plateNo, seats, mileage, price, carTypes, image }) => {
-   const errors = {};
+// export const validateCarDetails = ({ brand, model, plateNo, seats, mileage, price, carTypes, image }) => {
+//    const errors = {};
 
-   if(!brand) { errors.brand = '* Brand field is required '}
-   if(!model ) { errors.model = '* Model field is required' }
-   if(!carTypes ) { errors.carTypes = '* Types field is required' }
-   if(!plateNo ) { errors.plateNo = '* Plate Number field is required' }
-   if(!Number(seats) ) { errors.seats = '* Seats field is required' }
-   if(!Number(mileage) ) { errors.mileage = '* Mileage field is required' }
-   if(!Number(price) ) { errors.price = '* Price field is required' }
-   if(!image) { errors.image = '* Image field is required' }
+//    if(!brand) { errors.brand = '* Brand field is required '}
+//    if(!model ) { errors.model = '* Model field is required' }
+//    if(!carTypes ) { errors.carTypes = '* Types field is required' }
+//    if(!plateNo ) { errors.plateNo = '* Plate Number field is required' }
+//    if(!Number(seats) ) { errors.seats = '* Seats field is required' }
+//    if(!Number(mileage) ) { errors.mileage = '* Mileage field is required' }
+//    if(!Number(price) ) { errors.price = '* Price field is required' }
+//    if(!image) { errors.image = '* Image field is required' }
 
-   return errors;
-}
+//    return errors;
+// }
 
 
 export const validateBooking = (data) => {
@@ -85,8 +85,55 @@ const isValidDate = (dateString) => {
     const regex = /^\d{4}-\d{2}-\d{2}$/;
     return regex.test(dateString) && !isNaN(new Date(dateString));
 };
+
 const isISO8601 = (dateString) => {
   const iso8601Regex = /^\d{4}-\d{2}-\d{2}$/;
   return iso8601Regex.test(dateString);
 };
+
+// for admin new car validation 
+// utils/validateCarDetails.js
+
+export const validateCarDetails = (carDetails) => {
+    const errors = {};
+
+    if (!carDetails.brand.trim()) {
+        errors.brand = 'Brand is required';
+    }
+
+    if (!carDetails.model.trim()) {
+        errors.model = 'Model is required';
+    }
+
+    if (!carDetails.plateNo.trim()) {
+        errors.plateNo = 'Plate number is required';
+    }
+  
+    if (!carDetails.features.trim()) {
+        errors.features = 'features is required';
+    }
+
+    if (!carDetails.seats || isNaN(carDetails.seats) || carDetails.seats <= 0) {
+        errors.seats = 'Seats must be a positive number';
+    }
+
+    if (!carDetails.carTypes.trim()) {
+        errors.carTypes = 'Car type is required';
+    }
+
+    if (!carDetails.mileage || isNaN(carDetails.mileage) || carDetails.mileage < 0) {
+        errors.mileage = 'Mileage must be a non-negative number';
+    }
+
+    if (!carDetails.price || isNaN(carDetails.price) || carDetails.price < 0) {
+        errors.price = 'Price must be a non-negative number';
+    }
+
+    if (!carDetails.image) {
+        errors.image = 'Image is required';
+    }
+
+    return errors;
+};
+
 
