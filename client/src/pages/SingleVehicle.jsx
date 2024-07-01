@@ -8,7 +8,6 @@ const SingleVehicle = () => {
     const { carId } = useParams();
     const navigate = useNavigate();
     const [carDetails, setCarDetails] = useState({});
-    console.log(carDetails)
     const [bookingData, setBookingData] = useState({
         tripStartDate: '',
         tripEndDate: '',
@@ -74,10 +73,10 @@ const SingleVehicle = () => {
                             <div className="col-md-12 col-lg-7">
                                 <div className="p-4">
                                      
-                                    <h3 className="fw-bold">{carDetails.brand}</h3>
-                                    <h4 className="fw-normal">{carDetails.model}</h4>
                                     
                                     <Features
+                                        brand={carDetails.brand}
+                                        model={carDetails.model}
                                         features={carDetails.features}
                                         seats={carDetails.seats}
                                         carTypes={carDetails.carTypes}
