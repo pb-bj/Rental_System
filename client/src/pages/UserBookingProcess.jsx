@@ -9,12 +9,12 @@ import { toast } from 'react-hot-toast';
 const UserBookingProcess = () => {
    const [userInfoDetail, setUserInfoDetail] = useState({
     dob: '',
-    license: '',
+    image: null,
     gender: '',
    });
   const [errors, setErrors] = useState({
     dob: '',
-    license: '',
+    image: null,
     gender : '',
   });
   
@@ -37,9 +37,16 @@ const UserBookingProcess = () => {
   const totalAmount = totalTripDays * carDetails?.price;
 
   const handleChange = (e) => {
-    setUserInfoDetail((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    setErrors((prevErrors) => ({...prevErrors, [e.target.name] : ''}))
-    }
+    const { name, value, files } = e.target;
+    setUserInfoDetail((prev) => ({
+      ...prev,
+      [name]: files ? files[0] : value
+    }));
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: '',
+    }));
+  }
 
   // sending the booking data to server
   const handleSubmitBookingData = async (e) => {
@@ -61,25 +68,23 @@ const UserBookingProcess = () => {
       }
 
       setBookingSubmitted(true);
-
-      const sendBookingData = {
-        dob: userInfoDetail.dob,
-        gender: userInfoDetail.gender,
-        license: userInfoDetail.license,
-        carId: carDetails._id,
-        location: bookingData.pickupLocation,
-        tripStartDate: bookingData.tripStartDate,
-        tripEndDate: bookingData.tripEndDate,
-        totalPrice: totalAmount
-      };
+      const formData = new FormData();
+          formData.append('dob', userInfoDetail.dob);
+          formData.append('gender', userInfoDetail.gender);
+          formData.append('image', userInfoDetail.image);
+          formData.append('carId', carDetails._id);
+          formData.append('location', bookingData.pickupLocation);
+          formData.append('tripStartDate', bookingData.tripStartDate);
+          formData.append('tripEndDate', bookingData.tripEndDate);
+          formData.append('totalPrice', totalAmount);
       
        const delayedPromise = new Promise((resolve, reject) => {
-      setTimeout(() => {
-        bookingRequest(sendBookingData, authToken.token)
-          .then(resolve)
-          .catch(reject);
-      }, 2000); // 2000 ms delay
-       });
+          setTimeout(() => {
+            bookingRequest(formData, authToken.token)
+              .then(resolve)
+              .catch(reject);
+          }, 2000); 
+          });
       
       toast.promise(
         delayedPromise,
@@ -137,8 +142,8 @@ const UserBookingProcess = () => {
 
             <div className="col-sm-6">
               <label className="form-label">Driving license</label>
-              <input type="text" className="form-control shadow-none" name="license" value={userInfoDetail?.license} onChange={ handleChange} placeholder='xx-xx-xxxxxxxx' autoComplete="off" />
-              {errors.license && <div className="text-danger" style={{ fontSize: '13px' }}>{errors.license}</div>}
+              <input type="file" className="form-control shadow-none" name="image" onChange={handleChange} autoComplete="off" />
+              {errors.image && <div className="text-danger" style={{ fontSize: '13px' }}>{errors.image}</div>}
             </div>
 
             <h6 className="mb-2 pt-4 text-secondary">Rental Vehicle Details</h6>

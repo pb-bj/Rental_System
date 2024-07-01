@@ -4,22 +4,23 @@ import mongoose from "mongoose";
 
 export const bookingDetails = async (req, res) => {
     try {
-        const { license, tripStartDate, tripEndDate, location, carId, totalPrice, dob, gender } = req.body;
+        const { tripStartDate, tripEndDate, location, carId, totalPrice, dob, gender } = req.body;
         const user = req.user._id;
+
+        if (!req.file) {
+            return res.status(400).json({ error: 'Please provide the image of Driving license' })
+        }
 
         // Checking for valid carId
         if (!mongoose.Types.ObjectId.isValid(carId)) {
             return res.status(400).json({ message: 'Invalid car id provided' });
         }
 
-        // checking for existing driver license 
-        const checkExisitingLicenseNumber = await Car.findOne({ user, license, isCancelled: false })
-        if (checkExisitingLicenseNumber) return res.status(400).json({ message: 'Driver license already exist' });
-
-        
         // Checking the price from frontend to backend
         const totalTripDays = Math.ceil((new Date(tripEndDate) - new Date(tripStartDate)) / (1000 * 60 * 60 * 24)) + 1;
         const car = await Car.findById(carId);
+        console.log('Total Trip Days', totalTripDays);
+        console.log('Price:', totalPrice);
 
         if (!car) {
             return res.status(404).json({ message: 'Car not found' });
@@ -30,24 +31,30 @@ export const bookingDetails = async (req, res) => {
         }
         
         const actualCalculatedPrice = car.price * totalTripDays;
-        console.log('Car price total', actualCalculatedPrice);
 
-        if (totalPrice !== actualCalculatedPrice) {
+        const userPrice = Number(totalPrice).toFixed(2);
+        const calculatedPrice = actualCalculatedPrice.toFixed(2);
+
+        console.log('Fixed Price from User:', userPrice);
+        console.log('Fixed Actual Calculated Price:', calculatedPrice);
+
+        if (userPrice !== calculatedPrice) {
             return res.status(400).json({ priceMismatch: true, actualCalculatedPrice });
         }
 
         const booking = new Booking({
             user,
-            license,
             tripStartDate,
             tripEndDate,
             location,
             dob,
             gender,
+            image : req.file?.path,
             car: carId,
             totalPrice: actualCalculatedPrice,
            
         });
+        if (!booking) return res.status(400).json({ error: 'Failed to book' });
         console.log(booking)
         await booking.save();
 
@@ -176,24 +183,40 @@ export const bookingCancellation = async (req, res) => {
     }
 }
 
-//for admin revenue amount 
+//for admin revenue amount
+// export const totalRevenue = async (req, res) => {
+//     try {
+//         const bookings = await Booking.find({ isCancelled: false });
+    
+//         // const totalRevenue = bookings.reduce((acc, booking) => acc + booking.totalPrice, 0);
+//           const totalRevenue = bookings.reduce((acc, booking) => {
+//             if (!booking.isCancelled) {
+//                 return acc + booking.totalPrice;
+//             } else {
+//                 return acc - booking.refundAmount;
+//             }
+//         }, 0);
+//         console.log("Total Revenue Amount: ", totalRevenue);
+//         console.log('Refunded amount', totalRevenue);
+//         res.status(200).json({ totalRevenue });
+//     } catch (err) {
+//         console.log(err);
+//         return res.status(500).json({ message: err.message });
+//     }
+// }
+
 export const totalRevenue = async (req, res) => {
     try {
-        const bookings = await Booking.find({ isCancelled: false });
-    
-        // const totalRevenue = bookings.reduce((acc, booking) => acc + booking.totalPrice, 0);
-          const totalRevenue = bookings.reduce((acc, booking) => {
-            if (!booking.isCancelled) {
-                return acc + booking.totalPrice;
-            } else {
-                return acc - booking.refundAmount;
-            }
+        const bookings = await Booking.find({});
+
+        const totalRevenue = bookings.reduce((acc, booking) => {
+            return booking.isCancelled ? acc - booking.refundAmount : acc + booking.totalPrice;
         }, 0);
-        console.log("Total Revenue Amount: ", totalRevenue);
-        console.log('Refunded amount', totalRevenue);
+
+        // console.log("Total Revenue Amount: ", totalRevenue);
         res.status(200).json({ totalRevenue });
     } catch (err) {
-        console.log(err);
-        return res.status(500).json({ message: err.message });
+        console.error(err);
+        res.status(500).json({ message: err.message });
     }
 }

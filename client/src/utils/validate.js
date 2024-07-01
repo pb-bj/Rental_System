@@ -1,21 +1,5 @@
 import { differenceInYears, parseISO } from 'date-fns';
 
-// export const validateCarDetails = ({ brand, model, plateNo, seats, mileage, price, carTypes, image }) => {
-//    const errors = {};
-
-//    if(!brand) { errors.brand = '* Brand field is required '}
-//    if(!model ) { errors.model = '* Model field is required' }
-//    if(!carTypes ) { errors.carTypes = '* Types field is required' }
-//    if(!plateNo ) { errors.plateNo = '* Plate Number field is required' }
-//    if(!Number(seats) ) { errors.seats = '* Seats field is required' }
-//    if(!Number(mileage) ) { errors.mileage = '* Mileage field is required' }
-//    if(!Number(price) ) { errors.price = '* Price field is required' }
-//    if(!image) { errors.image = '* Image field is required' }
-
-//    return errors;
-// }
-
-
 export const validateBooking = (data) => {
   const errors = {};
 
@@ -41,7 +25,6 @@ export const validateBooking = (data) => {
 
     return errors;
 }
-
 
 export const bookingValidation = (data) => {
   const errors = {};
@@ -71,11 +54,10 @@ export const bookingValidation = (data) => {
     errors.gender = '* Invalid gender selection';
   }
 
-  const licenseRegex = /^\d{2}-\d{2}-\d{8}$/;
-  if (!data.license) {
-    errors.license = '* License Number is required';
-  } else if (!licenseRegex.test(data.license)) {
-    errors.license = '* License must be in the format xx-xx-xxxxxxxx';
+  if (!data.image) {
+    errors.image = '* Driving License is required';
+  } else if (!isValidFile(data.image)) {
+    errors.image = '* Invalid file format. Only images (jpg, png) are allowed';
   }
   
   return errors;
@@ -91,9 +73,12 @@ const isISO8601 = (dateString) => {
   return iso8601Regex.test(dateString);
 };
 
-// for admin new car validation 
-// utils/validateCarDetails.js
+const isValidFile = (file) => {
+  const allowedFileTypes = ['image/jpeg', 'image/png'];
+  return allowedFileTypes.includes(file.type);
+};
 
+// for admin new car validation 
 export const validateCarDetails = (carDetails) => {
     const errors = {};
 

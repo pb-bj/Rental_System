@@ -5,7 +5,6 @@ const bookingSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     car: { type: mongoose.Schema.Types.ObjectId, ref: 'Car', required: true },
     bookingDate: { type: Date, default: Date.now },
-    license: { type: String, required: true, unique: true },
     dob: { type: Date, required: true }, 
     gender: { type: String, enum: ['male', 'female'], required: true },
     tripStartDate: { type: Date, required: true },
@@ -13,7 +12,9 @@ const bookingSchema = new mongoose.Schema({
     totalTripDays: { type: Number },
     totalPrice: { type: Number },
     location: { type: String },
+    image: { type : String },
     isCancelled: { type: Boolean, default: false },
+    isApproved: { type : Boolean, default: false },
     cancellationReason: { type: String },
     refundAmount: { type: Number, default: 0 }
 }, { timestamps: true });
@@ -21,9 +22,9 @@ const bookingSchema = new mongoose.Schema({
 bookingSchema.pre('save', async function (next) {
   try {
 
-    if (this.isCancelled && !this.isCancelled) {
-      return next(new Error('Cancel reason is required'));
-    }
+     if (this.isModified('isCancelled') && this.isCancelled && !this.cancellationReason) {
+            return next(new Error('Cancel reason is required'));
+        }
 
     if (!this.isCancelled) {
       const totalTripDays = Math.ceil((this.tripEndDate - this.tripStartDate) / (1000 * 60 * 60 * 24)) + 1;

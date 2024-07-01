@@ -58,10 +58,10 @@ export const bookingRules = [
     .withMessage('Booking date must be a valid date in ISO 8601 format')
     .toDate(),
 
-  check('license')
-    .optional({ nullable: true })
-    .isString()
-    .withMessage('License must be a string'),
+  // check('license')
+  //   .optional({ nullable: true })
+  //   .isString()
+  //   .withMessage('License must be a string'),
 
   check('dob')
     .notEmpty().withMessage('Date of birth is required')
