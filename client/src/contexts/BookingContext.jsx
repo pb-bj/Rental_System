@@ -29,8 +29,6 @@ const BookingProvider = ({ children }) => {
                 return booking.id === bookingId ? {...booking,  isCancelled: true } : booking
             })})
         } catch (err) {
-            console.log(err);
-            console.error('Error cancelling booking:', err);
             fetchUserData(); // in case of cancellation failed
         }
         await bookingCancellation(bookingId, cancelReason, authToken.token);
