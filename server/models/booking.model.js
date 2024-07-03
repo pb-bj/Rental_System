@@ -14,19 +14,21 @@ const bookingSchema = new mongoose.Schema({
     location: { type: String },
     image: { type : String },
     isCancelled: { type: Boolean, default: false },
-    isApproved: { type : Boolean, default: false },
+    status: { type: String, enum: ['pending', 'approved', 'cancelled'], default: 'pending' },
     cancellationReason: { type: String },
+    cancelledBy: { type: String, enum: ['admin', 'user'], default: null },
+    isPaid : { type : Boolean, default: false },
     refundAmount: { type: Number, default: 0 }
 }, { timestamps: true });
 
 bookingSchema.pre('save', async function (next) {
   try {
 
-     if (this.isModified('isCancelled') && this.isCancelled && !this.cancellationReason) {
+     if (this.isModified('status') && this.status === 'cancelled' && !this.cancellationReason) {
             return next(new Error('Cancel reason is required'));
         }
 
-    if (!this.isCancelled) {
+    if (this.status !== 'cancelled') {
       const totalTripDays = Math.ceil((this.tripEndDate - this.tripStartDate) / (1000 * 60 * 60 * 24)) + 1;
       const car = await Car.findById(this.car);
   
