@@ -11,6 +11,12 @@ export const bookingDetails = async (req, res) => {
             return res.status(400).json({ error: 'Please provide the image of Driving license' })
         }
 
+         // Check if the user already has an active booking
+        const activeBooking = await Booking.findOne({ user, isCancelled: false, isApproved: true });
+        if (activeBooking) {
+            return res.status(400).json({ message: 'User already has an active booking' });
+        }
+
         // Checking for valid carId
         if (!mongoose.Types.ObjectId.isValid(carId)) {
             return res.status(400).json({ message: 'Invalid car id provided' });
@@ -159,8 +165,9 @@ export const bookingCancellation = async (req, res) => {
                 return res.status(400).json({ error: 'Booking not found or already cancelled' });
         }
         
-        booking.isCancelled = true;
+        booking.status = 'cancelled';
         booking.cancellationReason = reasonForCancellation;
+        booking.cancelledBy = 'user';
 
         // for refund calculation
         const refundAmount = booking.totalPrice; 
