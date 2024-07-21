@@ -64,8 +64,8 @@ export const bookingDetails = async (req, res) => {
         console.log(booking)
         await booking.save();
 
-        car.isAvailable = false;
-        await car.save();
+        // car.isAvailable = false;
+        // await car.save();
         
         res.status(201).json({ priceMismatch: false, message: 'Booking created successfully', booking });
     } catch (error) {

@@ -18,7 +18,8 @@ const bookingSchema = new mongoose.Schema({
     cancellationReason: { type: String },
     cancelledBy: { type: String, enum: ['admin', 'user'], default: null },
     isPaid : { type : Boolean, default: false },
-    refundAmount: { type: Number, default: 0 }
+    refundAmount: { type: Number, default: 0 },
+    payment : { type: mongoose.Schema.Types.ObjectId, ref: 'Payment'}
 }, { timestamps: true });
 
 bookingSchema.pre('save', async function (next) {

@@ -22,46 +22,12 @@ export const loginRules = [
   check('password').exists().withMessage('Password is required.')
 ];
 
-// export const bookingRules = [
-  
-//   //  check('license')
-//   //   .matches(/^\d{2}-\d{2}-\d{8}$/)
-//   //   .withMessage('License must be in the format xx-xx-xxxxxxxx and contain only numbers and hyphens.'),
-   
-//   check('address')
-//     .exists({ checkNull: true })
-//     .withMessage('Address is required')
-//     .isString()
-//     .withMessage('Address must be a string'),
-  
-//   check('location')
-//     .exists({ checkNull: true })
-//     .withMessage('Location is required')
-//     .isString()
-//     .withMessage('Location must be a string'),
-  
-//   check('tripStartDate')
-//     .isISO8601()
-//     .withMessage('tripStartDate must be a valid date in ISO 8601 format.')
-//     .toDate(),
-
-//   check('tripEndDate')
-//     .isISO8601()
-//     .withMessage('tripEndDate must be a valid date in ISO 8601 format.')
-//     .toDate(),
-// ];
-
 export const bookingRules = [
   check('bookingDate')
     .optional({ nullable: true })
     .isISO8601()
     .withMessage('Booking date must be a valid date in ISO 8601 format')
     .toDate(),
-
-  // check('license')
-  //   .optional({ nullable: true })
-  //   .isString()
-  //   .withMessage('License must be a string'),
 
   check('dob')
     .notEmpty().withMessage('Date of birth is required')
@@ -85,7 +51,6 @@ export const bookingRules = [
     .withMessage('Trip end date must be a valid date in ISO 8601 format')
     .toDate(),
 
-
   check('totalPrice')
     .optional({ nullable: true })
     .isNumeric()
@@ -100,6 +65,13 @@ export const bookingRules = [
     .optional({ nullable: true })
     .isString()
     .withMessage('Cancellation reason must be a string')
+];
+
+export const paymentRules = [
+  check('amount')
+    .notEmpty().withMessage('Amount is required.')
+    .isNumeric().withMessage('Amount must be a number.')
+    .isFloat({ min: 0.01 }).withMessage('Amount must be greater than zero.')
 ];
 
 export const validationFunction = (req, res, next) => {

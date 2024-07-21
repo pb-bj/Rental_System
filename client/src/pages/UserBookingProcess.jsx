@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { formatedDate } from '../utils/formatedDate';
 import { useAuth } from '../contexts/AuthContext';
 import { bookingRequest } from '../api/booking';
@@ -20,6 +20,7 @@ const UserBookingProcess = () => {
   
   const { authData, authToken } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const { bookingData, carDetails } = location.state || {}
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
 
@@ -90,10 +91,12 @@ const UserBookingProcess = () => {
         delayedPromise,
         {
           loading: 'Booking in progress...',
-          success: 'Booking successful!',
+          success: null,
           error: 'Failed to book. Please try again.',
         }
-      )
+      ).then(() => {
+        navigate('/payment/process', { state: { amount: totalAmount }})
+      })
     } catch(err) {
       console.log(err);
       toast.error('Failed to book. Please try again.');

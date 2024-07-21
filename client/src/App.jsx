@@ -7,7 +7,9 @@ import {
   Register,
   Vehicles,
   SingleVehicle,
-  UserBookingProcess
+  UserBookingProcess,
+  PaymentForm,
+  PaymentLoginForm
 } from "./pages/index";
 
 import Layout from "./Layout/Layout";
@@ -15,6 +17,7 @@ import { AdminDashboard, Bookings, CustomerBookingDetails, DashboardContent, Man
 import PrivateRoute from "./PrivateRoute";
 import BookingDetails from "./Admin/BookingDetails";
 import UserPrivateRoute from "./UserPrivateRoute";
+import PaymentSuccessModal from "./components/PaymentSuccessModel";
 
 const App = () => {
   
@@ -43,6 +46,9 @@ const App = () => {
               <Route path="/vehicles/booking" element={<UserBookingProcess />} />
               <Route path="/user/dashboard" element={<UserDashboard />} />
           </Route>
+              <Route path="/payment/login" element={<PaymentLoginForm />} />
+              <Route path="/payment/process" element={<PaymentForm />} />
+              <Route path="/payment/process/success" element={<PaymentSuccessModal />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
