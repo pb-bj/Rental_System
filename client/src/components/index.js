@@ -7,5 +7,6 @@ import { Features } from "./Features";
 import UserDropDown from "./UserDropDown";
 import CarSearchBox from "./CarSearchBox";
 import CancelReasoningBox from "./CancelReasoningBox";
+import PaymentSuccessModel from "./PaymentSuccessModel";
 
-export { Navbar, Footer, Button, FormInput, Card, Features, UserDropDown, CarSearchBox, CancelReasoningBox }
+export { Navbar, Footer, Button, FormInput, Card, Features, UserDropDown, CarSearchBox, CancelReasoningBox , PaymentSuccessModel}

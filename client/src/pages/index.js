@@ -6,6 +6,8 @@ import NotFoundPage from './NotFoundPage';
 import Vehicles from './Vehicles';
 import SingleVehicle from './SingleVehicle';
 import UserBookingProcess from './UserBookingProcess';
+import PaymentForm from './PaymentForm';
+import PaymentLoginForm from './PaymentLoginForm';
 
 export {
     Login,
@@ -15,5 +17,7 @@ export {
     NotFoundPage,
     Vehicles,
     SingleVehicle,
-    UserBookingProcess
+    UserBookingProcess,
+    PaymentForm,
+    PaymentLoginForm
 }
