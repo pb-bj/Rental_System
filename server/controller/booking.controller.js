@@ -1,5 +1,6 @@
 import { Booking } from "../models/booking.model.js";
 import { Car } from "../models/car.model.js";
+import { Payment } from "../models/payment.model.js";
 import mongoose from "mongoose";
 
 export const bookingDetails = async (req, res) => {
@@ -8,15 +9,20 @@ export const bookingDetails = async (req, res) => {
         const user = req.user._id;
 
         if (!req.file) {
-            return res.status(400).json({ error: 'Please provide the image of Driving license' })
+            return res.status(400).json({ error: 'Please provide the image of Driving license' });
         }
 
-         // Check if the user already has an active booking
-        const activeBooking = await Booking.findOne({ user, isCancelled: false, isApproved: true });
-        if (activeBooking) {
-            return res.status(400).json({ message: 'User already has an active booking' });
-        }
+        // checking for the exisiting booking
+        const exisitingBooking = await Booking.findOne({
+            user,
+            tripStartDate: { $gte: new Date() },
+            isCancelled: false
+        });
 
+        if (exisitingBooking) {
+             return res.status(400).json({ message: 'User already has an active booking.' });
+        }
+        
         // Checking for valid carId
         if (!mongoose.Types.ObjectId.isValid(carId)) {
             return res.status(400).json({ message: 'Invalid car id provided' });
@@ -25,24 +31,18 @@ export const bookingDetails = async (req, res) => {
         // Checking the price from frontend to backend
         const totalTripDays = Math.ceil((new Date(tripEndDate) - new Date(tripStartDate)) / (1000 * 60 * 60 * 24)) + 1;
         const car = await Car.findById(carId);
-        console.log('Total Trip Days', totalTripDays);
-        console.log('Price:', totalPrice);
 
         if (!car) {
             return res.status(404).json({ message: 'Car not found' });
         }
 
         if (!car.isAvailable) {
-            return res.status(400).json({ message: 'Either booked or not available' })
+            return res.status(400).json({ message: 'Either booked or not available' });
         }
-        
-        const actualCalculatedPrice = car.price * totalTripDays;
 
+        const actualCalculatedPrice = car.price * totalTripDays;
         const userPrice = Number(totalPrice).toFixed(2);
         const calculatedPrice = actualCalculatedPrice.toFixed(2);
-
-        console.log('Fixed Price from User:', userPrice);
-        console.log('Fixed Actual Calculated Price:', calculatedPrice);
 
         if (userPrice !== calculatedPrice) {
             return res.status(400).json({ priceMismatch: true, actualCalculatedPrice });
@@ -50,29 +50,24 @@ export const bookingDetails = async (req, res) => {
 
         const booking = new Booking({
             user,
-            tripStartDate,
-            tripEndDate,
+            tripStartDate: new Date(tripStartDate),
+            tripEndDate: new Date(tripEndDate),
             location,
             dob,
             gender,
-            image : req.file?.path,
+            image: req.file?.path,
             car: carId,
-            totalPrice: actualCalculatedPrice,
-           
+            totalPrice: actualCalculatedPrice
         });
-        if (!booking) return res.status(400).json({ error: 'Failed to book' });
-        console.log(booking)
+
         await booking.save();
 
-        // car.isAvailable = false;
-        // await car.save();
-        
         res.status(201).json({ priceMismatch: false, message: 'Booking created successfully', booking });
     } catch (error) {
         console.error('Error when booking', error);
         res.status(500).json({ message: 'Internal server error' });
     }
-}
+};
 
 // single user booking details
 export const singleUserBookingDetails = async (req, res) => {
@@ -156,7 +151,8 @@ export const bookingCancellation = async (req, res) => {
     try {
         const bookingId = req.params.id;
         const userId = req.user._id;
-        const { reasonForCancellation } = req.body;
+        const userRole = req.user.role;
+        const { cancellationReason  } = req.body;
 
         if (!bookingId || !userId) return res.status(400).json({ error: 'Invalid ID' });
 
@@ -165,9 +161,9 @@ export const bookingCancellation = async (req, res) => {
                 return res.status(400).json({ error: 'Booking not found or already cancelled' });
         }
         
+        booking.cancellationReason = cancellationReason ;
         booking.status = 'cancelled';
-        booking.cancellationReason = reasonForCancellation;
-        booking.cancelledBy = 'user';
+        booking.cancelledBy = userRole === 'user'? 'user' : 'admin';
 
         // for refund calculation
         const refundAmount = booking.totalPrice; 
@@ -187,6 +183,58 @@ export const bookingCancellation = async (req, res) => {
     } catch (err) {
         console.log(err);
         return res.status(500).json({ message: err.message });
+    }
+}
+
+// for admin only to get the cancellation reasons 
+export const getAllCancelledBookings = async (req, res) => {
+    try {
+        const cancelledBooking = await Booking.find({ status: 'cancelled', cancelledBy: 'user' })
+            .populate('user', 'email')
+            .populate('car', 'model');
+        if (!cancelledBooking) return res.status(400).json({ message: 'No cancellation yet' });
+
+        const result = cancelledBooking.map((booking) => ({
+            email: booking.user.email,
+            model: booking.car.model,
+            cancellationReason: booking.cancellationReason
+        }));
+
+        res.status(200).json({ cancelledBookings: result });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: err.message });
+    }
+}
+// check availability for the multple bookings
+export const checkAvailability = async (req, res) => {
+     try {
+        const { tripStartDate, tripEndDate, carId } = req.body;
+
+        // Validate carId
+        if (!mongoose.Types.ObjectId.isValid(carId)) {
+            return res.status(400).json({ message: 'Invalid car id provided' });
+        }
+
+        // Check for overlapping bookings
+        const overlappingBookings = await Booking.find({
+            car: carId,
+            $or: [
+                { tripStartDate: { $lt: new Date(tripEndDate), $gte: new Date(tripStartDate) } },
+                { tripEndDate: { $gt: new Date(tripStartDate), $lte: new Date(tripEndDate) } },
+                { tripStartDate: { $lte: new Date(tripStartDate) }, tripEndDate: { $gte: new Date(tripEndDate) } }
+            ],
+            isCancelled: false
+        });
+
+        if (overlappingBookings.length > 0) {
+            return res.status(200).json({ isAvailable: false, message: 'The selected dates overlap with an existing booking.' });
+        }
+
+         res.status(200).json({ isAvailable: true, message: 'The car is available for the selected dates.' });
+    } catch (error) {
+        console.error('Error when checking availability', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 }
 
@@ -227,3 +275,4 @@ export const totalRevenue = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 }
+

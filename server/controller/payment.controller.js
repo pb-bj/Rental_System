@@ -48,6 +48,44 @@ export const createPayment = async (req, res) => {
     }
 }
 
+// export const getUserPaymentDetail = async (req, res) => {
+//     try {
+//         const userId = req.params.id;
+//          if (!mongoose.Types.ObjectId.isValid(userId)) {
+//             return res.status(400).json({ message: 'Invalid User ID' });
+//         }
+        
+//         const user = await User.findById(userId)
+//         if (!user) return res.status(404).json({ message: 'User not found' });
+
+//         const payment = await Payment.find({ user: userId }).populate('user', 'email');
+//         if (!payment || payment.length === 0) {
+//             return res.status(404).json({ message: 'No payment found' });
+//         }
+        
+//         // matching for booking id to payment id
+//         const bookings = await Booking.find({ user: userId }).populate('car').populate('payment');
+//          if (!bookings || bookings.length === 0) {
+//             return res.status(404).json({ message: 'No bookings found' });
+//         }
+        
+//         const paymentDetails = payment.map((paymentData) => {
+//             const relatedBooking = bookings.filter(booking => booking.payment && booking.payment.equals(paymentData._id));
+//             return {
+//                     payment: paymentData,
+//                     bookings : relatedBooking
+//                 }
+//         });
+
+
+//         console.log(paymentDetails);
+//         res.status(200).json({ message: 'User payment: ', paymentDetails });
+//     } catch (err) {
+//         console.log("Error", err);
+//         return res.status(500).json({ message: err.message });
+//     }
+// }
+
 export const getUserPaymentDetail = async (req, res) => {
     try {
         const userId = req.params.id;

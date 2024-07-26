@@ -22,8 +22,8 @@ export const dashboardSidebarMenu = [
   },
   {
     id: 4,
-    title: "Customers",
-    link: "customers-details",
+    title: "Cancellation Report",
+    link: "cancellation-details",
     icon: "bi bi-person",
     isActive: false,
   },

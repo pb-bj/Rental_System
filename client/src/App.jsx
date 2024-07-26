@@ -13,7 +13,7 @@ import {
 } from "./pages/index";
 
 import Layout from "./Layout/Layout";
-import { AdminDashboard, Bookings, CustomerBookingDetails, DashboardContent, ManageCarsContent } from "./Admin/index";
+import { AdminDashboard, Bookings, CancellationBookingDetails, DashboardContent, ManageCarsContent } from "./Admin/index";
 import PrivateRoute from "./PrivateRoute";
 import BookingDetails from "./Admin/BookingDetails";
 import UserPrivateRoute from "./UserPrivateRoute";
@@ -34,7 +34,7 @@ const App = () => {
             <Route path="bookings-details" element={<Bookings />} >
               <Route path=":bookingId" element={<BookingDetails />} />
             </Route>
-              <Route path="customers-details" element={<CustomerBookingDetails />} />
+              <Route path="cancellation-details" element={<CancellationBookingDetails />} />
           </Route>
         </Route>
 
