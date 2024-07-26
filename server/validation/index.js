@@ -61,10 +61,10 @@ export const bookingRules = [
     .isString()
     .withMessage('Location must be a string'),
 
-  check('cancellationReason')
-    .optional({ nullable: true })
-    .isString()
-    .withMessage('Cancellation reason must be a string')
+  // check('cancellationReason')
+  //   .optional({ nullable: true })
+  //   .isString()
+  //   .withMessage('Cancellation reason must be a string')
 ];
 
 export const paymentRules = [

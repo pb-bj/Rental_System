@@ -1,6 +1,6 @@
 import AdminDashboard from "./AdminDashboard";
 import Bookings from "./Bookings";
-import CustomerBookingDetails from "./CustomerBookingDetails";
+import CancellationBookingDetails from "./CancellationBookingDetails";
 import DashboardContent from "./DashboardContent";
 import DeleteCarModel from "./DeleteCarModel";
 import ManageCarsContent from "./ManageCarsContent";
@@ -12,7 +12,7 @@ import DashboardCard from "./DashboardCard";
 export {
   AdminDashboard,
   Bookings,
-  CustomerBookingDetails,
+  CancellationBookingDetails,
   DashboardContent,
   DeleteCarModel,
   ManageCarsContent,
