@@ -8,6 +8,7 @@ import SingleVehicle from './SingleVehicle';
 import UserBookingProcess from './UserBookingProcess';
 import PaymentForm from './PaymentForm';
 import PaymentLoginForm from './PaymentLoginForm';
+import UserDashboardMessage from './UserDashboardMessage';
 
 export {
     Login,
@@ -19,5 +20,6 @@ export {
     SingleVehicle,
     UserBookingProcess,
     PaymentForm,
-    PaymentLoginForm
+    PaymentLoginForm,
+    UserDashboardMessage,
 }

@@ -11,6 +11,7 @@ import {
     totalRevenue,
     checkAvailability,
     getAllCancelledBookings,
+    getAllAdminCancelledBookings,
 } from '../controller/booking.controller.js';
 import { bookingRules, validationFunction } from '../validation/index.js';
 import { upload } from '../utils/fileUpload.js';
@@ -23,7 +24,8 @@ router.get('/car-booking/admin/all', isAuthenticated, isAdmin, allBookingDetails
 
 // booking cancellation
 router.post('/car-booking/cancellation/:id', isAuthenticated, bookingCancellation);
-router.get('/car-booking/get-all-cancelled-bookings', isAuthenticated, isAdmin, getAllCancelledBookings)
+router.get('/car-booking/get-all-cancelled-bookings', isAuthenticated, isAdmin, getAllCancelledBookings);
+router.get('/car-booking/get-all-cancelled-bookings-by-admin', isAuthenticated, getAllAdminCancelledBookings);
 
 // booking count
 router.get('/car-booking/all-booking-count', isAuthenticated, isAdmin, allBookingCount);
@@ -34,5 +36,6 @@ router.post('/car-booking/check-availability', isAuthenticated, checkAvailabilit
 
 // for total revenue 
 router.get('/car-booking/revenue', isAuthenticated, isAdmin, totalRevenue);
+
 
 export default router;  
