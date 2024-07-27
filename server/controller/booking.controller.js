@@ -115,7 +115,7 @@ export const allBookingCount = async (req, res) => {
         const totalCancelledBookingCount = await Booking.countDocuments({ isCancelled: true });
         const totalActiveBookingCount = await Booking.countDocuments({ isCancelled: false });
 
-        if (!totalBookingCount || totalBookingCount.length == 0) {
+        if (totalBookingCount === 0) {
             return res.status(400).json({ message: 'No booking yet or empty booking' });
         }
 
@@ -163,6 +163,7 @@ export const bookingCancellation = async (req, res) => {
         
         booking.cancellationReason = cancellationReason ;
         booking.status = 'cancelled';
+        booking.isCancelled = true;
         booking.cancelledBy = userRole === 'user'? 'user' : 'admin';
 
         // for refund calculation
@@ -170,9 +171,9 @@ export const bookingCancellation = async (req, res) => {
         booking.refundAmount = refundAmount;
 
         await booking.save();
-        console.log("Cancelled", booking.isCancelled);
+        console.log("refunded amount", booking.refundedAmount);
 
-        const car = await Car.findById(booking.car) // from the booking car Id 
+        const car = await Car.findById(booking.car) // from the booking ko car Id 
         if (car) {
             car.isAvailable = true;
             car.save();
@@ -206,6 +207,7 @@ export const getAllCancelledBookings = async (req, res) => {
         return res.status(500).json({ message: err.message });
     }
 }
+
 // check availability for the multple bookings
 export const checkAvailability = async (req, res) => {
      try {
@@ -238,38 +240,20 @@ export const checkAvailability = async (req, res) => {
     }
 }
 
-//for admin revenue amount
-// export const totalRevenue = async (req, res) => {
-//     try {
-//         const bookings = await Booking.find({ isCancelled: false });
-    
-//         // const totalRevenue = bookings.reduce((acc, booking) => acc + booking.totalPrice, 0);
-//           const totalRevenue = bookings.reduce((acc, booking) => {
-//             if (!booking.isCancelled) {
-//                 return acc + booking.totalPrice;
-//             } else {
-//                 return acc - booking.refundAmount;
-//             }
-//         }, 0);
-//         console.log("Total Revenue Amount: ", totalRevenue);
-//         console.log('Refunded amount', totalRevenue);
-//         res.status(200).json({ totalRevenue });
-//     } catch (err) {
-//         console.log(err);
-//         return res.status(500).json({ message: err.message });
-//     }
-// }
-
 export const totalRevenue = async (req, res) => {
     try {
         const bookings = await Booking.find({});
 
-        const totalRevenue = bookings.reduce((acc, booking) => {
-            return booking.isCancelled ? acc - booking.refundAmount : acc + booking.totalPrice;
-        }, 0);
+        const { totalRevenue, totalRefunded } = bookings.reduce((acc, booking) => { 
+            if (booking.isCancelled) {
+                acc.totalRefunded += booking.refundAmount;
+            } else {
+                acc.totalRevenue += booking.totalPrice; 
+            }
+            return acc;
+        }, { totalRevenue: 0, totalRefunded: 0 });
 
-        // console.log("Total Revenue Amount: ", totalRevenue);
-        res.status(200).json({ totalRevenue });
+        res.status(200).json({ totalRevenue, totalRefunded });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: err.message });

@@ -8,18 +8,20 @@ import { useBookings } from "../hooks/useBookings";
 const DashboardContent = () => {
   const { cars } = useFetchCars();
   const { userCounts } = useUserCount();
-  const { bookingCounts, activeBookingCounts, cancelledBookingCounts, totalRevenue } = useBookings();
+  const { bookingCounts, activeBookingCounts, cancelledBookingCounts, totalAmount } = useBookings();
+  
+  const availableCars = cars.filter((car) => car.isAvailable);
   
   return (
     <div className="container">
       <div className="d-flex justify-space-between gap-5 ">
         <div>
           <h2 className="fw-semibold">Your total revenue</h2>
-          <span className="fs-2 fw-bold bgGradient">Rs {totalRevenue || 0 }</span>
+          <span className="fs-2 fw-bold bgGradient">Rs {totalAmount?.totalRevenue }</span>
         </div>
          <div>
           <h2>Refunded Amount</h2>
-          <span className="fs-2 fw-bold text-danger">Rs 0</span>
+          <span className="fs-2 fw-bold text-danger">Rs { totalAmount?.totalRefunded }</span>
         </div>
       </div>
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mt-4">
@@ -27,7 +29,7 @@ const DashboardContent = () => {
         <DashboardCard title="Bookings" context={activeBookingCounts || 0} />
         <DashboardCard title="Bookings Cancellations" context={cancelledBookingCounts || 0} />
         <DashboardCard title="Customers" context={userCounts || 0} />
-        <DashboardCard title="Available Cars" context={cars?.length || 0} />
+        <DashboardCard title="Available Cars" context={availableCars.length} />
       </div>
     </div>
   )
