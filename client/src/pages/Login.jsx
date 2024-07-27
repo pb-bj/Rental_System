@@ -30,9 +30,6 @@ const Login = () => {
 
       if (result.status === 200) {
         toast.success(`${result.data.message}`);
-        console.log(result.data.accessToken)
-        console.log(result.data.user);
-
         setAuthInfo(result.data);
 
         if (result.data.user.role === 'user') {

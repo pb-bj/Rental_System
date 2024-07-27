@@ -9,13 +9,14 @@ import {
   SingleVehicle,
   UserBookingProcess,
   PaymentForm,
-  PaymentLoginForm
+  PaymentLoginForm,
+  UserDashboardMessage
 } from "./pages/index";
 
 import Layout from "./Layout/Layout";
 import { AdminDashboard, Bookings, CancellationBookingDetails, DashboardContent, ManageCarsContent } from "./Admin/index";
 import PrivateRoute from "./PrivateRoute";
-import BookingDetails from "./Admin/BookingDetails";
+// import BookingDetails from "./Admin/BookingDetails";
 import UserPrivateRoute from "./UserPrivateRoute";
 import PaymentSuccessModal from "./components/PaymentSuccessModel";
 
@@ -32,7 +33,7 @@ const App = () => {
             <Route path="dashboard" element={<DashboardContent />} />
             <Route path="cars-details" element={<ManageCarsContent />} />
             <Route path="bookings-details" element={<Bookings />} >
-              <Route path=":bookingId" element={<BookingDetails />} />
+              {/* <Route path=":bookingId" element={<BookingDetails />} /> */}
             </Route>
               <Route path="cancellation-details" element={<CancellationBookingDetails />} />
           </Route>
@@ -45,6 +46,7 @@ const App = () => {
               <Route path="/vehicles/:carId" element={<SingleVehicle />} />
               <Route path="/vehicles/booking" element={<UserBookingProcess />} />
               <Route path="/user/dashboard" element={<UserDashboard />} />
+              <Route path="/user/dashboard/message" element={<UserDashboardMessage />} />
           </Route>
               <Route path="/payment/login" element={<PaymentLoginForm />} />
               <Route path="/payment/process" element={<PaymentForm />} />

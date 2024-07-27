@@ -1,6 +1,5 @@
 import { Booking } from "../models/booking.model.js";
 import { Car } from "../models/car.model.js";
-import { Payment } from "../models/payment.model.js";
 import mongoose from "mongoose";
 
 export const bookingDetails = async (req, res) => {
@@ -130,7 +129,6 @@ export const allBookingCount = async (req, res) => {
 export const userBookingCount = async (req, res) => {
     try {
         const userId = req.user._id;
-        console.log('user-id', userId)
 
         const totalBookingCount = await Booking.countDocuments({ user: userId });
         console.log('user-booking', totalBookingCount)
@@ -156,7 +154,15 @@ export const bookingCancellation = async (req, res) => {
 
         if (!bookingId || !userId) return res.status(400).json({ error: 'Invalid ID' });
 
-        const booking = await Booking.findOne({ _id: bookingId, user: userId });
+         let booking;
+
+        // If the user is an admin
+        if (userRole === 'admin') {
+            booking = await Booking.findById(bookingId);
+        } else {
+            booking = await Booking.findOne({ _id: bookingId, user: userId });
+        }
+
             if (!booking || booking.isCancelled) {
                 return res.status(400).json({ error: 'Booking not found or already cancelled' });
         }
@@ -171,7 +177,7 @@ export const bookingCancellation = async (req, res) => {
         booking.refundAmount = refundAmount;
 
         await booking.save();
-        console.log("refunded amount", booking.refundedAmount);
+        console.log("refunded amount", booking.refundAmount);
 
         const car = await Car.findById(booking.car) // from the booking ko car Id 
         if (car) {
@@ -187,7 +193,7 @@ export const bookingCancellation = async (req, res) => {
     }
 }
 
-// for admin only to get the cancellation reasons 
+// for admin only to get the cancellation reasons from user
 export const getAllCancelledBookings = async (req, res) => {
     try {
         const cancelledBooking = await Booking.find({ status: 'cancelled', cancelledBy: 'user' })
@@ -207,6 +213,31 @@ export const getAllCancelledBookings = async (req, res) => {
         return res.status(500).json({ message: err.message });
     }
 }
+
+// for user 
+export const getAllAdminCancelledBookings = async (req, res) => {
+    try {
+        const userId = req.user._id; 
+        const adminCancelledBookings = await Booking.find({ status: 'cancelled', cancelledBy: 'admin', user: userId })
+            .populate('user', 'email')
+            .populate('car', 'model');
+        if (!adminCancelledBookings || adminCancelledBookings.length === 0) {
+            return res.status(400).json({ message: 'No cancellations by admin yet' });
+        }
+
+        const result = adminCancelledBookings.map((booking) => ({
+            email: booking.user.email,
+            model: booking.car.model,
+            cancellationReason: booking.cancellationReason,
+            cancelledBy: booking.cancelledBy
+        }));
+
+        res.status(200).json({ adminCancelledBookings: result });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: err.message });
+    }
+};
 
 // check availability for the multple bookings
 export const checkAvailability = async (req, res) => {

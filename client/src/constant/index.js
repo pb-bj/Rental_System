@@ -22,7 +22,7 @@ export const dashboardSidebarMenu = [
   },
   {
     id: 4,
-    title: "Cancellation Report",
+    title: "Cancellation",
     link: "cancellation-details",
     icon: "bi bi-person",
     isActive: false,
