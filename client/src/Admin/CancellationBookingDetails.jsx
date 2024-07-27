@@ -19,33 +19,8 @@ const CancellationBookingDetails = () => {
     fetchAllUserCancellatioData();
   }, [])
   return (
-    // <section className="container-fluid mx-0 p-2">
-    //   <h3>Cancellation Reports</h3>
-    //   <div>
-    //         <table className="table table-striped table-bordered">
-    //       <thead>
-    //         <tr className='text-center'>
-    //           <th>Sn</th>
-    //           <th>Email</th>
-    //           <th>Model</th>
-    //           <th>Reason</th>
-    //         </tr>
-    //       </thead>
-    //         <tbody>
-    //         {cancellations?.map((cancelled, i) => (
-    //           <tr key={cancelled?._id}>
-    //             <td style={{ fontSize: '13px' }}>{i + 1}</td>
-    //             <td style={{ fontSize: '13px' }}>{cancelled?.email}</td>
-    //             <td style={{ fontSize: '13px' }}>{cancelled?.model}</td>
-    //             <td style={{ fontSize: '13px' }}>{cancelled?.cancellationReason}</td>
-    //           </tr>
-    //         ))}
-    //           </tbody>
-    // </table>
-    //   </div>
-    // </section>
      <section className="container-fluid mx-0 p-2">
-      <h3>Cancellation Reports</h3>
+      <h4>Cancellation Reports</h4>
       <div>
         <table className="table table-striped table-bordered">
           <thead>
