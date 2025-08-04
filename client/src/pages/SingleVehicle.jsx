@@ -18,18 +18,16 @@ const SingleVehicle = () => {
         tripEndDate: '',
         pickupLocation: '',
     });
-
+    // console.log('availability :', checkBookingAvailability({}))
     const handleBookingData = (e) => {
         setBookingData({ ...bookingData, [e.target.name]: e.target.value })
     }
-    
     
     // for submitting the data to another page 
     const handleSubmitbookingDetails = (e) => {
         e.preventDefault();
 
         const validation = validateBooking(bookingData);
-        console.log(bookingData)
         if (Object.keys(validation).length === 0) {
             navigate('/vehicles/booking', {
                 state: {
@@ -41,7 +39,6 @@ const SingleVehicle = () => {
             console.log('error', validation)
             setErrors(validation);
         }
-
     }
 
     useEffect(() => {
@@ -131,7 +128,6 @@ const SingleVehicle = () => {
                                             style={{ backgroundColor: "#8134A6" }}
                                             onClick={handleSubmitbookingDetails}
                                             disabled={!carDetails.isAvailable}
-                                            
                                         >Book now</button>
                                         </div>
                                 </form>
